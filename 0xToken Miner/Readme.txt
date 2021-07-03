@@ -1,4 +1,4 @@
-﻿BNBTCminer forked from IwYeo's SoliditySHA3Miner
+0xtoken x mineable x burn x shuffle x minter forked from IwYeo's SoliditySHA3Miner
 All-in-one mixed multi-GPU (nVidia, AMD, Intel) & CPU miner solves proof of work to mine supported EIP918 tokens in a single instance (with API).
 
 Current latest public release version: 2.2.3
@@ -10,7 +10,7 @@ VC++ 2019 can be downloaded from https://aka.ms/vs/16/release/vc_redist.x64.exe 
 CUDA 9.2 requires a minimum nVidia driver version of 396 [https://www.nvidia.com/drivers/beta]
 
 LICENSE
-BNBTCminer is licensed under the Apache License, Version 2.0 (the "License");
+0xtoken x mineable x burn x shuffle x minter  is licensed under the Apache License, Version 2.0 (the "License");
 Libraries are included in the Software under the following license terms:
 - libkeccak-tiny https://github.com/coruus/keccak-tiny/
 - Nethereum https://github.com/Nethereum/Nethereum/blob/master/LICENSE.md
