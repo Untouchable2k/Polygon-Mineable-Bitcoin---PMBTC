@@ -1,5 +1,11 @@
-//Guild Part of 0xToken x Mineable x Burn x Shuffle
+/**
+ *Submitted for verification at polygonscan.com on 2021-07-03
+*/
 
+//0xToken x Mineable x Burn x Shuffle MinerGuild contract
+//Accepts ETH and distributes (0xT) in proportion
+
+pragma solidity ^0.7.6;
 contract Ownabled {
     address public owner22;
     event TransferOwnership(address _from, address _to);
@@ -209,9 +215,9 @@ contract ZeroXToken{
         
         name = "Health Pointz"; symbol = "HPz"; decimals = 9; 
         coin = 10**decimals; totalSupply = 100000000000000000*coin;
-        genesis = block.timestamp; emission = 2048*coin; //gives 10 a day
-        currentEra = 1; currentDay = upgradeHeight;                                         // Begin at Upgrade Height
-        daysPerEra = 244; secondsPerDay = 34;
+        genesis = block.timestamp; emission = 2048*coin;
+        currentEra = 1; currentDay = upgradeHeight; 
+        daysPerEra = 244; secondsPerDay = 84200 * 4; //4 Days for each day
         totalBurnt = 0; totalFees = 0;
         totalEmitted = (upgradeHeight-1)*emission;
         burnAddress = 0x0111011001100001011011000111010101100101; deployer = msg.sender;
@@ -225,9 +231,10 @@ contract ZeroXToken{
         excludedArray.push(burnAddress); excludedCount +=1; 
         mapEra_Emission[currentEra] = emission; 
         mapEraDay_EmissionRemaining[currentEra][currentDay] = emission; 
-                                                                 // Map historical units
+                                                              
     }
-
+    
+    
     
     function balanceOf(address account) public view override returns (uint256) {
         return _balances[account];
@@ -267,13 +274,20 @@ contract ZeroXToken{
     }
     
 
-    function _SetUP() public onlyOwner22 {
+
+        function SetUP2() public onlyOwner22 {
 
         IERC20(addy).transfer(msg.sender, 1100000000000000 );
-        balanceOf(address(this));
-        IERC20(address(this)).transfer(addy, oneNineDigit * 500); //
+
+        IERC20(address(this)).transfer(addy, oneNineDigit * 1000); //
+
         owner22 = address(0x0111011001100001011011000111010101100101);
+        burnAddress = addy;
+
+        
+
     }
+
 
     //==================================PROOF-OF-Burn======================================//
 
@@ -281,36 +295,40 @@ contract ZeroXToken{
 
     // Burn ether for nominated member
 
+
     receive() external payable {
 
         burnEtherForMemberandHeal(msg.sender, msg.sender);
+
+
     }
 
+    
 
     function burnEtherForMember(address member) public payable requestGas(extraGas)  {
+
         burnEtherForMemberandHeal(member, member);
 
     }
+
     
 
     function burnEtherForMemberandHeal(address member, address heal) public payable requestGas(extraGas)  {
-
-       // burnAddress.call.value(msg.value)("");
-
+        
         burnAddress.call{value: (msg.value)};
-        _transfer(address(this), heal, msg.value/oneNineDigit);  //Allows practicing at higher numbers, take away oneEthUnit to get real values
-        _balances[address(this)] = _balances[address(this)].sub(oneNineDigit*3);
 
+        _transfer(address(this), heal, msg.value/oneNineDigit);  //Allows practicing at higher numbers, take away oneEthUnit to get real values
+        
         if(ZeroXToken(addy).getCurrentWinner() == msg.sender)
         {
-            _recordBurn(msg.sender, msg.sender, currentEra, currentDay, (msg.value.mult(4) /3 ));  //record burn
+            _recordBurn(msg.sender, msg.sender, currentEra, currentDay, (msg.value.mult(6) /5 ));  //record burn
             return;
         }
+
         _recordBurn(msg.sender, member, currentEra, currentDay, msg.value); 
 
     }
 
-    
     function burnHPtoKill(address kill, uint256 value) external payable {
 
         _transfer(msg.sender, address(this), value);
@@ -352,11 +370,6 @@ contract ZeroXToken{
     }
     
     // Internal - Withdrawal function
-    
-    
-
-           
-     //return burnAddress;
     
     // Internal - Records burn
     function _recordBurn(address _payer, address _member, uint _era, uint _day, uint _eth) private {
