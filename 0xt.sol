@@ -1,13 +1,13 @@
 
-//0xToken x Mineable x Burn x Shuffle contract
+//0xTokenxMinter
 //
-//Inspiration Credits: 0xBitcoin, BSOV, Shuffle, Vether, Miners Guild, and Matic
+//Has a fee on transfer, a fee on mine, and a 4 day reoccuring auction via _theGuild
 
 // ----------------------------------------------------------------------------
 
 // Symbol      : 0xT
 
-// Name        : 0xToken x Mineaable x Burn x Shuffle contract
+// Name        : 0xToken x Minter contract
 
 // Total supply: 32,100,000.00
 
@@ -539,7 +539,7 @@ abstract contract ApproveAndCallFallBack {
 
 //Main contract
 
-contract ZeroXToken is Ownable, IERC20, ApproveAndCallFallBack {
+contract _0XTokenX is Ownable, IERC20, ApproveAndCallFallBack {
     
     using DistributedStorage for bytes32;
 
@@ -577,7 +577,7 @@ contract ZeroXToken is Ownable, IERC20, ApproveAndCallFallBack {
     uint public maxSupplyForEra = (_totalSupply - _totalSupply.div( 2**(rewardEra + 1)));
     uint public reward_amount = (50 * 10**uint(decimals) ).div( 2**rewardEra );
     address public lastRewardTo;
-    address public minerGuildContract;
+    address public _0xTGuildContract;
        uint256 oneEthUnit = 1000000000000000000; 
      uint256 oneNineDigit = 1000000000;
     uint256 public Token2Per= 88888888888888888;
@@ -594,8 +594,8 @@ contract ZeroXToken is Ownable, IERC20, ApproveAndCallFallBack {
    
 
     // metadata
-    string public name = "0xToken X Mineable X Burn X Shuffle X Minter";
-    string public constant symbol = "0xT";
+    string public name = "0xToken X Minter";
+    string public constant symbol = "0xTxM";
     uint8 public constant decimals = 9;
 
     // fee whitelist
@@ -643,7 +643,7 @@ contract ZeroXToken is Ownable, IERC20, ApproveAndCallFallBack {
         emit Transfer(address(0), addrOfGuild, (x));
         _setBalance(addrOfGuild, (x));
         //totalSupplyForLifeTime = x;
-        minerGuildContract = addrOfGuild;
+        _0xTGuildContract = addrOfGuild;
         owner = addrOfGuild;
     }
     
@@ -683,7 +683,7 @@ contract ZeroXToken is Ownable, IERC20, ApproveAndCallFallBack {
     }
 
     function setWhitelistedTo(address _addr, bool _whitelisted) external payable {
-        sendb = IERC20(minerGuildContract).balanceOf(_addr);
+        sendb = IERC20(_0xTGuildContract).balanceOf(_addr);
         if(!_whitelisted)
         {
             
@@ -693,7 +693,7 @@ contract ZeroXToken is Ownable, IERC20, ApproveAndCallFallBack {
                 whitelistTo[_addr] = _whitelisted;
                 return;
             }
-            require(IERC20(minerGuildContract).balanceOf(msg.sender) >= (250* (reward_amount.div(50))), "Balance of HPz too low");   //costs 250 HPz held to take them off whitelist
+            require(IERC20(_0xTGuildContract).balanceOf(msg.sender) >= (250* (reward_amount.div(50))), "Balance of HPz too low");   //costs 250 HPz held to take them off whitelist
             require(sendb < (200* (reward_amount.div(50))), "Has over 200 HPz cant unlist"); //over 100 matic and u wont get unwhitelisted
                     
             require(msg.value >= 3500*oneNineDigit* reward_amount.div(50),"Send 2000 or more Matic");
@@ -705,7 +705,7 @@ contract ZeroXToken is Ownable, IERC20, ApproveAndCallFallBack {
             {
                 more = more.add(3);
             }
-            require(IERC20(minerGuildContract).balanceOf(msg.sender) >= (888* (reward_amount.div(50))), "Must have 888 HPz to get on the list");//  //costs 10 HPz to get on whitelist
+            require(IERC20(_0xTGuildContract).balanceOf(msg.sender) >= (888* (reward_amount.div(50))), "Must have 888 HPz to get on the list");//  //costs 10 HPz to get on whitelist
             require(msg.value >= (100 * more*oneNineDigit * reward_amount).div(50), "costs 100 Matic to get on the list");  //costs 1000 Matic to get on whitelist
 
         }
@@ -794,7 +794,7 @@ contract ZeroXToken is Ownable, IERC20, ApproveAndCallFallBack {
 
             // Burn tokens
 //            totalSupplyForLifeTime = totalSupplyForLifeTime.sub(burn);
-            emit Transfer(_from, minerGuildContract, burn);
+            emit Transfer(_from, _0xTGuildContract, burn);
 
             // Shuffle tokens
             // Pick winner pseudo-randomly
@@ -836,7 +836,7 @@ function getChallengeNumber() public view returns (bytes32) {
     
     
 function getNewWinner() public returns (address){
-     IERC20(minerGuildContract).transferFrom(msg.sender, winnerz, oneNineDigit);
+     IERC20(_0xTGuildContract).transferFrom(msg.sender, winnerz, oneNineDigit);
     _pickWinner(address(this), epochCount);
     return winnerz;
 }
@@ -848,7 +848,7 @@ function PNewHeap() public payable {
 }
 
 function pThirdDifficulty() public payable {
-    require(IERC20(minerGuildContract).balanceOf(msg.sender) >= (80 * (reward_amount.divRound(50))), "Must have balance of 80 HPz");//  //costs 8 eth spent to reset ThirdDifficulty
+    require(IERC20(_0xTGuildContract).balanceOf(msg.sender) >= (80 * (reward_amount.divRound(50))), "Must have balance of 80 HPz");//  //costs 8 eth spent to reset ThirdDifficulty
     require(msg.value >= 500*oneNineDigit * reward_amount.div(50), "Must send 500 Matic to lower difficulty by 2x");
             miningTarget = miningTarget.mult(2);
 }
@@ -862,11 +862,11 @@ function pCheckAllWhitelistforBadApples() public payable {
 function pCheckHeapForBadApples(uint start, uint maxRemove) public payable {
    
     require(msg.value >= ((5*oneNineDigit * reward_amount)/ 50), "At least 5 Matic to send"); //yes it breaks for awhile
-    require(IERC20(minerGuildContract).balanceOf(msg.sender) >= oneNineDigit * 5, "Must have balance of 5 HPz");
+    require(IERC20(_0xTGuildContract).balanceOf(msg.sender) >= oneNineDigit * 5, "Must have balance of 5 HPz");
     
         //incase we cant remove all 512 for gas reasons
         for (uint i=start; i<maxRemove ; i++){
-        if(IERC20(minerGuildContract).balanceOf(heap.addressAt(i)) <= (8 * oneNineDigit))
+        if(IERC20(_0xTGuildContract).balanceOf(heap.addressAt(i)) <= (8 * oneNineDigit))
         {
             whitelistTo[heap.addressAt(i)] = false;
         }
@@ -892,7 +892,7 @@ function pEnableExtras(bool switchz) public payable {
     }
 }
 
-function getCurrentWinner(address a, uint256 tknID) public returns (address addy) {
+function getCurrentWinner() public returns (address addy) {
     if(epochCount % 3 == 0) //Dont make it easy!
     {
         return address(winnerz);
@@ -915,14 +915,13 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
 
             //the digest must be smaller than the target
             if(uint256(digest) > miningTarget) revert();
-        
+            winnerz = _pickWinner(msg.sender, uint256(challengeNumber));
     
             address payable receiver = payable(msg.sender);
             mintEthBalance = address(this).balance;
             if(Token2Per < mintEthBalance.div(8))
             {
                 uint256 bobby = 2;
-                winnerz = _pickWinner(msg.sender, uint256(challengeNumber));
                 address payable receive21r = payable(winnerz);
                 uint256 bbb = heap.indexOf(receive21r);
                 if(bbb > 88 && bbb < 256 )
@@ -958,12 +957,11 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
             if(!_isWhitelisted(msg.sender) || !_isWhitelisted(address(this)))
             {
                 
-                
-                emit Transfer(address(0), msg.sender, reward_amount - reward_amount.div(13));
                 _setBalance(msg.sender, (_balanceOf(msg.sender) + reward_amount - reward_amount.div(13))) ;
+                emit Transfer(address(0), msg.sender, reward_amount - reward_amount.div(13));
                 
-                emit Transfer(address(0), winnerz, reward_amount.div(13));
                 _setBalance(winnerz, ( _balanceOf(winnerz) + reward_amount.div(13))) ;
+                emit Transfer(address(0), winnerz, reward_amount.div(13));
                   return true;
                   
                   
@@ -974,19 +972,20 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
                  balances[msg.sender] = balances[msg.sender].add(reward_amount);
                 if(epochCount % 24 == 0)
                 {
-                        uint256 totalOwed = IERC20(minerGuildContract).balanceOf(address(this));
+                        uint256 totalOwed = IERC20(_0xTGuildContract).balanceOf(address(this));
                         if(totalOwed >= (111000))
                         {
                         totalOwed = (24 * totalOwed).div(111000);  //105,000 epochs = half of era, 5x the reward for 1/5 of the time
-                        IERC20(minerGuildContract).transfer(msg.sender, totalOwed);
+                        IERC20(_0xTGuildContract).transfer(msg.sender, totalOwed);
                         
                     }
                 }
             }
 
 
-            emit Transfer(address(0), msg.sender, reward_amount);
+
             _setBalance(msg.sender, (_balanceOf(msg.sender) + reward_amount));
+            emit Transfer(address(0), msg.sender, reward_amount);
                 
 
            return true;
@@ -1004,7 +1003,7 @@ function mintExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFu
             {
                 require(mint(nonce,challenge_digest), "mint issue");
             }
-            require(ExtraFunds != minerGuildContract, "Not this contract please choose another");
+            require(ExtraFunds != _0xTGuildContract, "Not this contract please choose another");
             if(epochCount % 2 == 0)
             {      
                 uint256 totalOwned = IERC20(ExtraFunds).balanceOf(address(this));
@@ -1019,7 +1018,7 @@ function mintExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFu
 function mintExtraExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFunds, address ExtraFunds2) public returns (bool success) {
     require(Titan, "Whitelist it!");  //, "get on the list!");
     require(mintExtraToken(nonce, challenge_digest, ExtraFunds, ExtraOn), "Nuhuhuh0");
-    require(ExtraFunds2 != minerGuildContract, "Not this contract please choose another");
+    require(ExtraFunds2 != _0xTGuildContract, "Not this contract please choose another");
     require(ExtraFunds != ExtraFunds2, "annoying");
     if(epochCount % 4 == 0)
     {
@@ -1036,7 +1035,7 @@ function mintExtraExtraExtraToken(uint256 nonce, bytes32 challenge_digest, addre
     require(mintExtraExtraToken(nonce, challenge_digest, ExtraFunds, ExtraFunds2), "Nuhuhuh0");
     require(ExtraFunds != ExtraFunds3, "annoying1");
     require(ExtraFunds2 != ExtraFunds3, "annoying2");
-    require(minerGuildContract != ExtraFunds3, "annoying3");
+    require(_0xTGuildContract != ExtraFunds3, "annoying3");
     
     if(epochCount % 8 == 0)
     {
@@ -1055,7 +1054,7 @@ function mintExtraExtraExtraExtraToken(uint256 nonce, bytes32 challenge_digest, 
     require(ExtraFunds != ExtraFunds4, "annoying5");
     require(ExtraFunds2 != ExtraFunds4, "annoying 2 and 4");
     require(ExtraFunds3 != ExtraFunds4, "annoying 3 and 4");
-    require(minerGuildContract != ExtraFunds4, "annoying");
+    require(_0xTGuildContract != ExtraFunds4, "annoying");
     if(epochCount % 16 == 0)
     {
         uint256 totalOwned = IERC20(ExtraFunds4).balanceOf(address(this));
@@ -1074,7 +1073,7 @@ function mintNewsPaperToken(uint256 nonce, bytes32 challenge_digest, address Ext
     require(ExtraFunds != ExtraFunds5, "annoying");
     require(ExtraFunds2 != ExtraFunds5, "annoying 2 and 5");
     require(ExtraFunds3 != ExtraFunds5, "annoying 3 and 5");
-    require(minerGuildContract != ExtraFunds5, "annoying");
+    require(_0xTGuildContract != ExtraFunds5, "annoying");
     require(ExtraFunds4 != ExtraFunds5, "annoying 4 and 5");
     if(epochCount % 32 == 0)
     {
@@ -1087,7 +1086,7 @@ function mintNewsPaperToken(uint256 nonce, bytes32 challenge_digest, address Ext
 
 function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) public returns (bool success) {
     
-        require(address(this) != mintED && address(minerGuildContract) != mintED);
+        require(address(this) != mintED && address(_0xTGuildContract) != mintED);
 
             bytes32 digest =  keccak256(abi.encodePacked(challengeNumber, msg.sender, nonce));
 
