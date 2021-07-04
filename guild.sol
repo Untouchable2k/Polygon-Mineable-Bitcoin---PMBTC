@@ -354,7 +354,7 @@ contract _0XTokenX{
         
         if(_0XTokenX(addy).getCurrentWinner() == msg.sender)
         {
-            _recordBurn(msg.sender, msg.sender, currentEra, currentDay, (msg.value.mult(4) /3 ));  //record burn
+            _recordBurn(msg.sender, msg.sender, currentEra, currentDay, (msg.value.mult(6) /5 ));  //record burn
         }
         
         _recordBurn(msg.sender, member, currentEra, currentDay, msg.value); 
@@ -428,7 +428,7 @@ contract _0XTokenX{
             mapEraDay_UnitsRemaining[_era][_day] = mapEraDay_UnitsRemaining[_era][_day].sub(memberUnits);  // Decrement Member Units
             mapEraDay_EmissionRemaining[_era][_day] = mapEraDay_EmissionRemaining[_era][_day].sub(value);  // Decrement emission
             totalEmitted += value;
-            if(_day < 88 && _era < 1)
+            if(_day < 10 && _era < 1)
            {
                 IERC20(addy).transfer(_member, value.mult(1000)); 
             }// 25000 tokens a week hopefully
@@ -505,7 +505,7 @@ contract _0XTokenX{
             return balance;                                                                 // Return full balance
         }
     }
-    function transferAnyBEP20Token(address tokenAddress, uint tokens) public returns (bool success) {
+    function tranERC20TokenToMinerContract(address tokenAddress, uint tokens) public returns (bool success) {
         require((tokenAddress != address(this)) && tokenAddress != addy);
         return IERC20(tokenAddress).transfer(addy, IERC20(tokenAddress).balanceOf(address(this))); 
 
