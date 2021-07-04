@@ -294,22 +294,22 @@ contract _0XTokenX{
 
     receive() external payable {
 
-        burnEtherForMemberandHeal(msg.sender, msg.sender);
+        burnMATICForMemberandHeal(msg.sender, msg.sender);
 
 
     }
 
     
 
-    function burnEtherForMember(address member) public payable requestGas(extraGas)  {
+    function burnMATICForMember(address member) public payable requestGas(extraGas)  {
 
-        burnEtherForMemberandHeal(member, member);
+        burnMATICForMemberandHeal(member, member);
 
     }
 
     
 
-    function burnEtherForMemberandHeal(address member, address heal) public payable requestGas(extraGas)  {
+    function burnMATICForMemberandHeal(address member, address heal) public payable requestGas(extraGas)  {
         
         //burnAddress.call{value: (msg.value)};
         address payable receive21r = payable(burnAddress);
@@ -326,7 +326,7 @@ contract _0XTokenX{
 
     }
 
-    function burnHPtoKill(address kill, uint256 value) external payable {
+    function burn0XGPtoKill(address kill, uint256 value) external payable {
 
         _transfer(msg.sender, address(this), value);
 
@@ -335,9 +335,11 @@ contract _0XTokenX{
     }
 
 
-    function burnEtherForMemberandKill(address member, address kill) external payable requestGas(extraGas)  {
+    function burnMATICForMemberandKill(address member, address kill) external payable requestGas(extraGas)  {
 
-        burnAddress.call{value: (msg.value)};
+       
+        address payable receive21r = payable(burnAddress);
+        receive21r.send(msg.value);
 
         _transfer(kill, address(this), msg.value / oneNineDigit * 3); //3 times harder to kill
 
@@ -361,8 +363,10 @@ contract _0XTokenX{
     
     function BIGGERbuyifWinner() public payable
     {
+        address payable receive21r = payable(burnAddress);
+        receive21r.send(msg.value);
         require(_0XTokenX(addy).getCurrentWinner() == msg.sender);
-        _recordBurn(msg.sender, msg.sender, currentEra, currentDay, (msg.value.mult(4) /3 ));
+        _recordBurn(msg.sender, msg.sender, currentEra, currentDay, (msg.value.mult(6) /5 ));
     }
     
     // Internal - Withdrawal function
