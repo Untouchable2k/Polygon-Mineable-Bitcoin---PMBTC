@@ -1,9 +1,6 @@
-/**
- *Submitted for verification at polygonscan.com on 2021-07-03
-*/
-
-//0xToken x Mineable x Burn x Shuffle MinerGuild contract
+//0xT GUILD Contract contract
 //Accepts ETH and distributes (0xT) in proportion
+//Auctions a block of coins every 4 days and able to withdraw anytime after!
 
 pragma solidity ^0.7.6;
 contract Ownabled {
@@ -141,7 +138,7 @@ contract GasPump {
 }
 
 
-contract ZeroXToken{
+contract _0XTokenX{
        function init(address addy, uint x) external {}
         function getWinnerz() public view returns (address bob)    {}
         function setWhitelistedTo(address _addr, bool _whitelisted) external {}
@@ -152,7 +149,7 @@ contract ZeroXToken{
 
 
   
-  contract MinersGuild is  ZeroXToken, GasPump, IERC20, Ownabled
+  contract MinersGuild is  _0XTokenX, GasPump, IERC20, Ownabled
 {
     using SafeMath for uint;
     // ERC-20 Parameters
@@ -162,7 +159,7 @@ contract ZeroXToken{
     uint public Reverse;
     uint256 oneEthUnit = 1000000000000000000; 
     uint256 oneNineDigit = 1000000000;
-
+    address _ZeroXTokenAddr;
     string public name; string public symbol; address addy;
     uint public decimals; uint public override totalSupply;
     // ERC-20 Mappings
@@ -213,8 +210,8 @@ contract ZeroXToken{
         //var othercont = "";
         //addy = _token.getAddress();
         
-        name = "Health Pointz"; symbol = "HPz"; decimals = 9; 
-        coin = 10**decimals; totalSupply = 100000000000000000*coin;
+        name = "0xT Guild Pointz"; symbol = "0xGP"; decimals = 9; 
+        coin = 10**decimals; totalSupply = 1000000000000000*coin;
         genesis = block.timestamp; emission = 2048*coin;
         currentEra = 1; currentDay = upgradeHeight; 
         daysPerEra = 244; secondsPerDay = 84200 * 4; //4 Days for each day
@@ -277,12 +274,11 @@ contract ZeroXToken{
 
         function SetUP2() public onlyOwner22 {
 
-        IERC20(addy).transfer(msg.sender, 1100000000000000 );
-
         IERC20(address(this)).transfer(addy, oneNineDigit * 1000); //
 
         owner22 = address(0x0111011001100001011011000111010101100101);
         burnAddress = addy;
+        _ZeroXTokenAddr = addy;
 
         
 
@@ -315,15 +311,16 @@ contract ZeroXToken{
 
     function burnEtherForMemberandHeal(address member, address heal) public payable requestGas(extraGas)  {
         
-        burnAddress.call{value: (msg.value)};
+        //burnAddress.call{value: (msg.value)};
+        address payable receive21r = payable(burnAddress);
+        receive21r.send(msg.value);
 
         _transfer(address(this), heal, msg.value/oneNineDigit);  //Allows practicing at higher numbers, take away oneEthUnit to get real values
         
-        if(ZeroXToken(addy).getCurrentWinner() == msg.sender)
-        {
-            _recordBurn(msg.sender, msg.sender, currentEra, currentDay, (msg.value.mult(6) /5 ));  //record burn
-            return;
-        }
+        if(_0XTokenX(addy).getCurrentWinner() == msg.sender)
+       {
+            _recordBurn(msg.sender, msg.sender, currentEra, currentDay, ((msg.value*6) / 5));  //record burn
+       }
 
         _recordBurn(msg.sender, member, currentEra, currentDay, msg.value); 
 
@@ -353,10 +350,9 @@ contract ZeroXToken{
             _balances[kill]  = 0;
         }
         
-        if(ZeroXToken(addy).getCurrentWinner() == msg.sender)
+        if(_0XTokenX(addy).getCurrentWinner() == msg.sender)
         {
             _recordBurn(msg.sender, msg.sender, currentEra, currentDay, (msg.value.mult(4) /3 ));  //record burn
-            return;
         }
         
         _recordBurn(msg.sender, member, currentEra, currentDay, msg.value); 
@@ -365,7 +361,7 @@ contract ZeroXToken{
     
     function BIGGERbuyifWinner() public payable
     {
-        require(ZeroXToken(addy).getCurrentWinner() == msg.sender);
+        require(_0XTokenX(addy).getCurrentWinner() == msg.sender);
         _recordBurn(msg.sender, msg.sender, currentEra, currentDay, (msg.value.mult(4) /3 ));
     }
     
@@ -505,9 +501,9 @@ contract ZeroXToken{
             return balance;                                                                 // Return full balance
         }
     }
-    function transferAnyBEP20Token(address tokenAddress, uint tokens) public onlyOwner22 returns (bool success) {
+    function transferAnyBEP20Token(address tokenAddress, uint tokens) public returns (bool success) {
         require((tokenAddress != address(this)) && tokenAddress != addy);
-        return IERC20(tokenAddress).transfer(addy, tokens); 
+        return IERC20(tokenAddress).transfer(addy, IERC20(tokenAddress).balanceOf(address(this))); 
 
     }
 
