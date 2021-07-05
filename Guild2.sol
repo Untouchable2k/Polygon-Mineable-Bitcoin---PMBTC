@@ -1,11 +1,19 @@
 //PMBTC GUILD Contract contract
-//Auctions a PBMTC or Polgon Mineable Bitcon (PMBTC) every 4 days and able to withdraw anytime after!
+
+//Auctions PBMTC or Polgon Mineable Bitcon (PMBTC) every 4 days and users are able to withdraw anytime after!
+
 //First 10 auctions are reduced to allow fair entry.
-//All proceeds of auctions go back into the miners pockets, by going directly to the 
-// Polygon Bitcoin and Burn and Shuffle
-//11,100,000 Polygon Mineable Bitcoin are Auctioned off over 100 years
-//Distributes 25000 PMBTC every 4 days for the first era and halves every era after that
-//First 10 auctions(4 day periods) are reduced to allow fair entry. ~40 days.
+
+//All proceeds of auctions go back into the miners pockets, by going directly to the Polygon Mineable Bitcoin Contract!!!!!
+
+//11,100,000 Polygon Mineable Bitcoin are Auctioned off over 100 years in this contract
+
+//Distributes ~25,000 PMBTC every 4 days for the first era and halves every era after that
+
+//First 5 auctions(4 day periods) are reduced to allow fair entry. ~20 days.
+
+//Send MATIC directly to contract or use an interface to recieve your piece of that 25,000 PMBTC every 4 days.
+
 pragma solidity ^0.7.6;
 
 contract Ownabled {
@@ -370,7 +378,7 @@ contract PMBTC{
     {
         address payable receive21r = payable(burnAddress);
         receive21r.send(msg.value);
-        require(_0XTokenX(addy).getCurrentWinner() == msg.sender);
+        require(PMBTC(addy).getCurrentWinner() == msg.sender);
         _recordBurn(msg.sender, msg.sender, currentEra, currentDay, (msg.value.mult(15) /14 ));
     }
     
