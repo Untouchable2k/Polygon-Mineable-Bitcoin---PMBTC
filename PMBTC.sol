@@ -1,7 +1,16 @@
 
 //Polygon Mineable Bitcoin - PMBTC
 //
-//Has a fee on transfer, a fee on mine, and a 4 day reoccuring auction via _theGuild
+// Contract is able to print multiple cryptocurrencies at once.
+//
+//Top 512 holders recieve 8% of mining payouts until a miner whitelists themselves.
+//Top 512 holders recieve 1% of every transfer
+// 1% of every transfer is burned to TheGuild in order to benifit everyone
+
+//Heap Spots 2-98 reieve double mining payouts of Matic (miners)
+//Heap Spots 98-488 recieve payouts of MATIC randomly (holders)!!
+//check your Heap spot with indexOf function
+
 //Credits: 0xBitcoin, Vether, Shuffle
 //Network Polygon
 //
@@ -12,17 +21,18 @@
 // Name        : Polygon Mineable Bitcoin - PMBTC
 
 // Total supply: 32,100,000.00
+//   =
+// 21,000,000 Mined over ~100+ years using Bitcoins Distrubtion halvings every 4 years
+//   +
+// 11,100,000 Auctioned over 100 years in 4 day auctions split fairly among all buyers, similar to vether, halvings every 4 years
 
-// 21,000,000 Mined over ~100+ years using Bitcoins Distrubtion
-
-// 11,100,000 Auctioned over 100 years in 4 day auction periods, similar to vether, halvings every 4 years
-
+//No premine, dev cut, or advantage taken at launch. Public miner and public pool available
 
 // Mints forever for every token!
 // Add your token and it will become instantly mineable and distribute forever!!
 // Decimals    : 9
 
-//Viva la Token Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will sell it for hashpower!
+//Viva la Token Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will reward a miner with it!
 //
 
 
@@ -541,7 +551,9 @@ contract Heap is Ownable {
         }
     }
 }
-
+contract  MinersGuild{
+    function burnMATICForMember(address member) public payable  {}
+}
 
 abstract contract ApproveAndCallFallBack {
     function receiveApproval(address from, uint256 tokens, address token, bytes memory data) virtual public;
@@ -600,10 +612,7 @@ contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
     uint public tokensMinted;
     mapping(address => uint) balances;
     mapping(address => mapping(address => uint)) allowed;
-
-    event Mint(address indexed from, uint reward_amount, uint epochCount, bytes32 newChallengeNumber);
-   
-
+    
     // metadata
     string public name = "Polygon Mineable Bitcoin - Multi Token Mining";
     string public constant symbol = "PMBTC";
@@ -632,10 +641,10 @@ contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
 
         
         _totalSupply = 21000000 * 10**uint(9);
-		//0xbitcoin commands short and sweet
+		//bitcoin commands short and sweet
 		
 		
-		miningTarget = _MAXIMUM_TARGET.div(200);  //50,000 difficulty to start
+		miningTarget = _MAXIMUM_TARGET;
 		
 		tokensMinted = 0;
 		rewardEra = 0;
@@ -650,7 +659,6 @@ contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
         emit SetHeap(address(0), address(heap));
 
         // Init contract variables and mint
-        // entire token balance
         emit Transfer(address(0), addrOfGuild, (x));
         _setBalance(addrOfGuild, (x));
         emit Transfer(address(0), address(this), _totalSupply);
@@ -805,8 +813,9 @@ contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
             receives = receives.sub(burn.add(shuf));
 
             // Burn tokens
+            
             emit Transfer(_from, PMBTCGuildContract, burn);
-
+            
             // Shuffle tokens
             // Pick winner pseudo-randomly
             address winner = _pickWinner(_from, _value);
@@ -922,17 +931,19 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
             bytes32 digest =  keccak256(abi.encodePacked(challengeNumber, msg.sender, nonce));
 
             //the challenge digest must match the expected
-            if (digest != challenge_digest) revert();
+            require(digest == challenge_digest, "Old challenge_digest or wrong challenge_digest");
 
             //the digest must be smaller than the target
-            if(uint256(digest) > miningTarget) revert();
+            require(uint256(digest) < miningTarget, "Digest must be smaller than miningTarget");
+            
+            mintEthBalance = address(this).balance;
             address payable receiver = payable(msg.sender);
             if(Token2Per < mintEthBalance.div(8))
             {
                 uint256 bobby = 2;
                 address payable receive21r = payable(winnerz);
                 uint256 bbb = heap.indexOf(receive21r);
-                if(bbb > 88 && bbb < 256 )
+                if(bbb > 94 && bbb < 444 )
                 {
                     bobby.add(1);
                     receive21r.send(Token2Per.divRound(2));
@@ -940,7 +951,7 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
                 
                 
                 uint256 meow = heap.indexOf(receiver);
-                if (meow > 25 && meow < 95)
+                if (meow > 2 && meow < 95)
                 {
                     bobby.sub(1);
                 }
@@ -1138,8 +1149,6 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
       //every so often, readjust difficulty. Dont readjust when deploying
     if((epochCount % _BLOCKS_PER_READJUSTMENT== 0))
     {
-        
-        mintEthBalance = address(this).balance;
          if(( mintEthBalance/ Token2Per) <= 200000)
          {
              if(Token2Per.div(2) > Token3Min)
@@ -1212,10 +1221,11 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
 
 
     //31.1m coins total
+    // = 
     //21 million proof of work
-    //10 million proof of burn
-    //500,000-1 million token airdrop to 0xBTC, Kiwi, BSOV, Shuffle, Vether, BNBTC, and BNBSOV
-    //reward begins at 50 and is cut in half every reward era (as tokens are mined)
+    // + 
+    //11.1 million proof of burn
+    //reward begins at 50 tokens per and is cut in half every reward era(3-4 years)
 
     
     function getMiningReward() public view returns (uint) {
@@ -1322,6 +1332,5 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
 
     receive() external payable {
     }
-
-
+        
 }
