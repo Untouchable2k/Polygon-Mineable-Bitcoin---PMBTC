@@ -1,4 +1,4 @@
-//PMBTC GUILD Contract contract
+//PMBTC GUILD contract
 
 //Auctions PBMTC or Polgon Mineable Bitcon (PMBTC) every 4 days and users are able to withdraw anytime after!
 
