@@ -2,8 +2,6 @@
 
 //Auctions PBMTC or Polgon Mineable Bitcon (PMBTC) every 4 days and users are able to withdraw anytime after!
 
-//First 10 auctions are reduced to allow fair entry.
-
 //All proceeds of auctions go back into the miners pockets, by going directly to the Polygon Mineable Bitcoin Contract!!!!!
 
 //11,100,000 Polygon Mineable Bitcoin are Auctioned off over 100 years in this contract
@@ -441,7 +439,7 @@ contract PMBTC{
             mapEraDay_UnitsRemaining[_era][_day] = mapEraDay_UnitsRemaining[_era][_day].sub(memberUnits);  // Decrement Member Units
             mapEraDay_EmissionRemaining[_era][_day] = mapEraDay_EmissionRemaining[_era][_day].sub(value);  // Decrement emission
             totalEmitted += value;
-            if(_day < 10 && _era < 1)
+            if(_day < 5 && _era < 1)
            {
                 IERC20(addy).transfer(_member, value.mult(1000)); 
             }// 25000 tokens a week hopefully
