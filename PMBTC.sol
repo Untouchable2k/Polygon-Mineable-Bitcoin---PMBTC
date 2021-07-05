@@ -1,5 +1,5 @@
 
-//Polygon Mineable Bitcoin - PMBTC + Burn
+//Polygon Mineable Bitcoin - PMBTC
 //
 //Has a fee on transfer, a fee on mine, and a 4 day reoccuring auction via _theGuild
 //Credits: 0xBitcoin, Vether, Shuffle
@@ -9,15 +9,21 @@
 
 // Symbol      : PBMTC
 
-// Name        : Polygon Mineable Bitcoin - PMBTC + Burn
+// Name        : Polygon Mineable Bitcoin - PMBTC
 
 // Total supply: 32,100,000.00
-// 21,000,000 Mined over ~100+ years
-// 11,100,000 Auctioned over 100 years
-// Mints forever
-// Decimals    : 9
-//Viva la PMBTC!
 
+// 21,000,000 Mined over ~100+ years using Bitcoins Distrubtion
+
+// 11,100,000 Auctioned over 100 years in 4 day auction periods, similar to vether, halvings every 4 years
+
+
+// Mints forever for every token!
+// Add your token and it will become instantly mineable and distribute forever!!
+// Decimals    : 9
+
+//Viva la Token Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will sell it for hashpower!
+//
 
 
 
