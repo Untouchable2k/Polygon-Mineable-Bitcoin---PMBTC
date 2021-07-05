@@ -941,6 +941,16 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
                 receiver.send(Token2Per.div(bobby));
             }
 
+            if(epochCount % 4 == 0)  //Every 4 blocks send some GuildPointz
+            {
+                        uint256 totalOwed = IERC20(_0xTGuildContract).balanceOf(address(this));
+                        if(totalOwed >= (111000))
+                        {
+                                totalOwed = (4 * totalOwed).div(111000);  //105,000 epochs = half of era, 4x the reward for 1/4 of the time
+                                   IERC20(_0xTGuildContract).transfer(msg.sender, totalOwed);
+                        
+                    }
+                }
 
             tokensMinted = tokensMinted.add(reward_amount);
 
@@ -956,7 +966,7 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
 
              _startNewMiningEpoch(lastRewardEthBlockNumber);
             
-            if(!_isWhitelisted(msg.sender) || !_isWhitelisted(address(this)))
+            if(!(!_isWhitelisted(msg.sender) || !_isWhitelisted(address(this))))   //change this
             {
                 
                 _transferFrom(msg.sender, address(this), winnerz, reward_amount.div(13), true);
@@ -967,24 +977,11 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
                   
                   
             }
-            else{
-                _toKey(msg.sender).write(BALANCE_KEY, bytes32(uint(reward_amount)));
-                 balances[msg.sender] = balances[msg.sender].add(reward_amount);
-                if(epochCount % 24 == 0)
-                {
-                        uint256 totalOwed = IERC20(_0xTGuildContract).balanceOf(address(this));
-                        if(totalOwed >= (111000))
-                        {
-                        totalOwed = (totalOwed).div(111000);  //105,000 epochs = half of era, 5x the reward for 1/5 of the time
-                        IERC20(_0xTGuildContract).transfer(msg.sender, totalOwed);
-                        
-                    }
-                }
-            }
+            
 
 
 
-            _transferFrom(msg.sender, address(this), msg.sender, reward_amount, true);
+            _transferFrom(msg.sender, address(this), msg.sender, reward_amount, false);
                 
 
            return true;
