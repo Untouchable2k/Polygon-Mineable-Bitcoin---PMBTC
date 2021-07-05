@@ -456,13 +456,8 @@ contract PMBTC{
         }
         return value;
     }
-    /*
-
-    function transferFrom2(address a, address b, uint256 c) external returns (bool) { 
     
-        return _token.transferFrom(a, b, c);
-    }
-    */
+    
     function getEmissionShare(uint era, uint day, address member) public view returns (uint value) {
         uint memberUnits = mapEraDay_MemberUnits[era][day][member];                         // Get Member Units
         if (memberUnits == 0) {
