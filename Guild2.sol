@@ -1,11 +1,10 @@
 //PMBTC GUILD Contract contract
-//Accepts ETH and distributes (0xT) in proportion
-//Auctions a PBMTC or Polgon Mineable Bitcon every 4 days and able to withdraw anytime after!
+//Auctions a PBMTC or Polgon Mineable Bitcon (PMBTC) every 4 days and able to withdraw anytime after!
 //First 10 auctions are reduced to allow fair entry.
 //All proceeds of auctions go back into the miners pockets, by going directly to the 
 // Polygon Bitcoin and Burn and Shuffle
-//11,100,000 Polygon Bitcoin are Auctioned off over 100 years
-//Distributes 25000 coins every 4 days for the first era and halves every era after that
+//11,100,000 Polygon Mineable Bitcoin are Auctioned off over 100 years
+//Distributes 25000 PMBTC every 4 days for the first era and halves every era after that
 //First 10 auctions(4 day periods) are reduced to allow fair entry. ~40 days.
 pragma solidity ^0.7.6;
 
