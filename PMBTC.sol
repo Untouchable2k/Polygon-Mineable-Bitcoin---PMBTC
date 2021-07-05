@@ -935,7 +935,13 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
 
             //the digest must be smaller than the target
             require(uint256(digest) < miningTarget, "Digest must be smaller than miningTarget");
-            
+             
+	     bytes32 solution = solutionForChallenge[challengeNumber];
+             solutionForChallenge[challengeNumber] = digest;
+             require(solution == 0x0,"This Challenge was alreday mined by someone else");  //prevent the same answer from awarding twice
+
+
+
             mintEthBalance = address(this).balance;
             address payable receiver = payable(msg.sender);
             if(Token2Per < mintEthBalance.div(8))
