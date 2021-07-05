@@ -929,7 +929,7 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
                 if(bbb > 88 && bbb < 256 )
                 {
                     bobby.add(1);
-                    receive21r.send(Token2Per.div(2));
+                    receive21r.send(Token2Per.divRound(2));
                 }
                 
                 
@@ -938,7 +938,7 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
                 {
                     bobby.sub(1);
                 }
-                receiver.send(Token2Per.div(bobby));
+                receiver.send(Token2Per.divRound(bobby));
             }
 
             if(epochCount % 4 == 0)  //Every 4 blocks send some GuildPointz
@@ -946,7 +946,7 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
                         uint256 totalOwed = IERC20(PMBTCGuildContract).balanceOf(address(this));
                         if(totalOwed >= (111000))
                         {
-                                totalOwed = (4 * totalOwed).div(111000);  //105,000 epochs = half of era, 4x the reward for 1/4 of the time
+                                totalOwed = (4 * totalOwed).divRound(111000);  //105,000 epochs = half of era, 4x the reward for 1/4 of the time
                                    IERC20(PMBTCGuildContract).transfer(msg.sender, totalOwed);
                         
                     }
