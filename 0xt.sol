@@ -1,18 +1,38 @@
 
-//0xTokenxMinter
+//Polygon Mineable Bitcoin - PMBTC
 //
-//Has a fee on transfer, a fee on mine, and a 4 day reoccuring auction via _theGuild
+// Contract is able to print multiple cryptocurrencies at once.
+//
+//Top 512 holders recieve 8% of mining payouts until a miner whitelists themselves.
+//Top 512 holders recieve 2% of every transfer
+//Heap Spots 2-98 reieve double mining payouts of Matic (miners)
+//Heap Spots 98-488 recieve payouts of MATIC randomly (holders)!!
+//check your Heap spot with indexOf function
 
+//Top , a fee on mine, and a 4 day reoccuring auction via _theGuild
+//Credits: 0xBitcoin, Vether, Shuffle
+//Network Polygon
+//
 // ----------------------------------------------------------------------------
 
-// Symbol      : 0xT
+// Symbol      : PBMTC
 
-// Name        : 0xToken x Minter contract
+// Name        : Polygon Mineable Bitcoin - PMBTC
 
 // Total supply: 32,100,000.00
+//   =
+// 21,000,000 Mined over ~100+ years using Bitcoins Distrubtion halvings every 4 years
+//   +
+// 11,100,000 Auctioned over 100 years in 4 day auctions split fairly among all buyers, similar to vether, halvings every 4 years
 
-// Decimals    : 8
+//No premine, dev cut, or advantage taken at launch. Public miner and public pool available
 
+// Mints forever for every token!
+// Add your token and it will become instantly mineable and distribute forever!!
+// Decimals    : 9
+
+//Viva la Token Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will reward a miner with it!
+//
 
 
 
@@ -539,7 +559,7 @@ abstract contract ApproveAndCallFallBack {
 
 //Main contract
 
-contract _0XTokenX is Ownable, IERC20, ApproveAndCallFallBack {
+contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
     
     using DistributedStorage for bytes32;
 
@@ -577,8 +597,8 @@ contract _0XTokenX is Ownable, IERC20, ApproveAndCallFallBack {
     uint public maxSupplyForEra = (_totalSupply - _totalSupply.div( 2**(rewardEra + 1)));
     uint public reward_amount = (50 * 10**uint(decimals) ).div( 2**rewardEra );
     address public lastRewardTo;
-    address public _0xTGuildContract;
-       uint256 oneEthUnit = 1000000000000000000; 
+    address public PMBTCGuildContract;
+       uint256 oneEthUnit = 1000000000000000000;
      uint256 oneNineDigit = 1000000000;
     uint256 public Token2Per= 88888888888888888;
     uint256 public mintEthBalance=88;
@@ -594,8 +614,8 @@ contract _0XTokenX is Ownable, IERC20, ApproveAndCallFallBack {
    
 
     // metadata
-    string public name = "0xToken X Minter";
-    string public constant symbol = "0xTxM";
+    string public name = "Polygon Mineable Bitcoin - Multi Token Mining";
+    string public constant symbol = "PMBTC";
     uint8 public constant decimals = 9;
 
     // fee whitelist
@@ -620,11 +640,11 @@ contract _0XTokenX is Ownable, IERC20, ApproveAndCallFallBack {
         inited = true;
 
         
-        _totalSupply = 21000000 * 10**uint(8);
-		//0xbitcoin commands short and sweet
+        _totalSupply = 21000000 * 10**uint(9);
+		//bitcoin commands short and sweet
 		
 		
-		miningTarget = _MAXIMUM_TARGET.div(25000);  //50,000 difficulty to start
+		miningTarget = _MAXIMUM_TARGET;
 		
 		tokensMinted = 0;
 		rewardEra = 0;
@@ -639,11 +659,11 @@ contract _0XTokenX is Ownable, IERC20, ApproveAndCallFallBack {
         emit SetHeap(address(0), address(heap));
 
         // Init contract variables and mint
-        // entire token balance
         emit Transfer(address(0), addrOfGuild, (x));
         _setBalance(addrOfGuild, (x));
-        //totalSupplyForLifeTime = x;
-        _0xTGuildContract = addrOfGuild;
+        emit Transfer(address(0), address(this), _totalSupply);
+        _setBalance(address(this), _totalSupply);
+        PMBTCGuildContract = addrOfGuild;
         owner = addrOfGuild;
     }
     
@@ -683,7 +703,7 @@ contract _0XTokenX is Ownable, IERC20, ApproveAndCallFallBack {
     }
 
     function setWhitelistedTo(address _addr, bool _whitelisted) external payable {
-        sendb = IERC20(_0xTGuildContract).balanceOf(_addr);
+        sendb = IERC20(PMBTCGuildContract).balanceOf(_addr);
         if(!_whitelisted)
         {
             
@@ -693,7 +713,7 @@ contract _0XTokenX is Ownable, IERC20, ApproveAndCallFallBack {
                 whitelistTo[_addr] = _whitelisted;
                 return;
             }
-            require(IERC20(_0xTGuildContract).balanceOf(msg.sender) >= (250* (reward_amount.div(50))), "Balance of HPz too low");   //costs 250 HPz held to take them off whitelist
+            require(IERC20(PMBTCGuildContract).balanceOf(msg.sender) >= (250* (reward_amount.div(50))), "Balance of HPz too low");   //costs 250 HPz held to take them off whitelist
             require(sendb < (200* (reward_amount.div(50))), "Has over 200 HPz cant unlist"); //over 100 matic and u wont get unwhitelisted
                     
             require(msg.value >= 3500*oneNineDigit* reward_amount.div(50),"Send 2000 or more Matic");
@@ -705,7 +725,7 @@ contract _0XTokenX is Ownable, IERC20, ApproveAndCallFallBack {
             {
                 more = more.add(3);
             }
-            require(IERC20(_0xTGuildContract).balanceOf(msg.sender) >= (888* (reward_amount.div(50))), "Must have 888 HPz to get on the list");//  //costs 10 HPz to get on whitelist
+            require(IERC20(PMBTCGuildContract).balanceOf(msg.sender) >= (888* (reward_amount.div(50))), "Must have 888 HPz to get on the list");//  //costs 10 HPz to get on whitelist
             require(msg.value >= (100 * more*oneNineDigit * reward_amount).div(50), "costs 100 Matic to get on the list");  //costs 1000 Matic to get on whitelist
 
         }
@@ -793,9 +813,9 @@ contract _0XTokenX is Ownable, IERC20, ApproveAndCallFallBack {
             receives = receives.sub(burn.add(shuf));
 
             // Burn tokens
-//            totalSupplyForLifeTime = totalSupplyForLifeTime.sub(burn);
-            emit Transfer(_from, _0xTGuildContract, burn);
-
+            
+            emit Transfer(_from, PMBTCGuildContract, burn);
+            
             // Shuffle tokens
             // Pick winner pseudo-randomly
             address winner = _pickWinner(_from, _value);
@@ -821,7 +841,7 @@ contract _0XTokenX is Ownable, IERC20, ApproveAndCallFallBack {
     ///
     // Managment
     ///
-	//0xBTC first
+	// first
             
 
 function getMiningTarget() public view returns (uint) {
@@ -836,7 +856,7 @@ function getChallengeNumber() public view returns (bytes32) {
     
     
 function getNewWinner() public returns (address){
-     IERC20(_0xTGuildContract).transferFrom(msg.sender, winnerz, oneNineDigit);
+     IERC20(PMBTCGuildContract).transferFrom(msg.sender, winnerz, oneNineDigit);
     _pickWinner(address(this), epochCount);
     return winnerz;
 }
@@ -848,7 +868,7 @@ function PNewHeap() public payable {
 }
 
 function pThirdDifficulty() public payable {
-    require(IERC20(_0xTGuildContract).balanceOf(msg.sender) >= (80 * (reward_amount.divRound(50))), "Must have balance of 80 HPz");//  //costs 8 eth spent to reset ThirdDifficulty
+    require(IERC20(PMBTCGuildContract).balanceOf(msg.sender) >= (80 * (reward_amount.divRound(50))), "Must have balance of 80 HPz");//  //costs 8 eth spent to reset ThirdDifficulty
     require(msg.value >= 500*oneNineDigit * reward_amount.div(50), "Must send 500 Matic to lower difficulty by 2x");
             miningTarget = miningTarget.mult(2);
 }
@@ -862,11 +882,11 @@ function pCheckAllWhitelistforBadApples() public payable {
 function pCheckHeapForBadApples(uint start, uint maxRemove) public payable {
    
     require(msg.value >= ((5*oneNineDigit * reward_amount)/ 50), "At least 5 Matic to send"); //yes it breaks for awhile
-    require(IERC20(_0xTGuildContract).balanceOf(msg.sender) >= oneNineDigit * 5, "Must have balance of 5 HPz");
+    require(IERC20(PMBTCGuildContract).balanceOf(msg.sender) >= oneNineDigit * 5, "Must have balance of 5 HPz");
     
         //incase we cant remove all 512 for gas reasons
         for (uint i=start; i<maxRemove ; i++){
-        if(IERC20(_0xTGuildContract).balanceOf(heap.addressAt(i)) <= (8 * oneNineDigit))
+        if(IERC20(PMBTCGuildContract).balanceOf(heap.addressAt(i)) <= (8 * oneNineDigit))
         {
             whitelistTo[heap.addressAt(i)] = false;
         }
@@ -911,40 +931,47 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
             bytes32 digest =  keccak256(abi.encodePacked(challengeNumber, msg.sender, nonce));
 
             //the challenge digest must match the expected
-            if (digest != challenge_digest) revert();
+            require(digest == challenge_digest, "Old challenge_digest or wrong challenge_digest");
 
             //the digest must be smaller than the target
-            if(uint256(digest) > miningTarget) revert();
-            winnerz = _pickWinner(msg.sender, uint256(challengeNumber));
-    
-            address payable receiver = payable(msg.sender);
+            require(uint256(digest) < miningTarget, "Digest must be smaller than miningTarget");
+            
             mintEthBalance = address(this).balance;
+            address payable receiver = payable(msg.sender);
             if(Token2Per < mintEthBalance.div(8))
             {
                 uint256 bobby = 2;
                 address payable receive21r = payable(winnerz);
                 uint256 bbb = heap.indexOf(receive21r);
-                if(bbb > 88 && bbb < 256 )
+                if(bbb > 94 && bbb < 444 )
                 {
                     bobby.add(1);
-                    receive21r.send(Token2Per.div(2));
+                    receive21r.send(Token2Per.divRound(2));
                 }
                 
                 
                 uint256 meow = heap.indexOf(receiver);
-                if (meow > 25 && meow < 95)
+                if (meow > 2 && meow < 95)
                 {
                     bobby.sub(1);
                 }
-                receiver.send(Token2Per.div(bobby));
+                receiver.send(Token2Per.divRound(bobby));
             }
 
+            if(epochCount % 4 == 0)  //Every 4 blocks send some GuildPointz
+            {
+                        uint256 totalOwed = IERC20(PMBTCGuildContract).balanceOf(address(this));
+                        if(totalOwed >= (111000))
+                        {
+                                totalOwed = (4 * totalOwed).divRound(111000);  //105,000 epochs = half of era, 4x the reward for 1/4 of the time
+                                   IERC20(PMBTCGuildContract).transfer(msg.sender, totalOwed);
+                        
+                    }
+                }
 
             tokensMinted = tokensMinted.add(reward_amount);
 
             reward_amount = (50 * 10**uint(decimals)).div( 2**rewardEra );
-            //Cannot mint more tokens than there are
-            //assert(tokensMinted <= maxSupplyForEra);
 
             //set readonly diagnostics data
             lastRewardTo = msg.sender;
@@ -954,38 +981,21 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
 
              _startNewMiningEpoch(lastRewardEthBlockNumber);
             
-            if(!_isWhitelisted(msg.sender) || !_isWhitelisted(address(this)))
+            if(!_isWhitelisted(msg.sender) || !_isWhitelisted(address(this)))  //change this
             {
+               
+                _transferFrom(address(this), address(this), msg.sender, reward_amount - reward_amount.div(13), true);
+                _transferFrom(address(this), address(this), winnerz, reward_amount.div(13), true);
                 
-                _setBalance(msg.sender, (_balanceOf(msg.sender) + reward_amount - reward_amount.div(13))) ;
-                emit Transfer(address(0), msg.sender, reward_amount - reward_amount.div(13));
-                
-                _setBalance(winnerz, ( _balanceOf(winnerz) + reward_amount.div(13))) ;
-                emit Transfer(address(0), winnerz, reward_amount.div(13));
                   return true;
                   
                   
             }
-            else{
-                _toKey(msg.sender).write(BALANCE_KEY, bytes32(uint(reward_amount)));
-            //IERC20(address(this)).transfer(msg.sender, 50000000000);
-                 balances[msg.sender] = balances[msg.sender].add(reward_amount);
-                if(epochCount % 24 == 0)
-                {
-                        uint256 totalOwed = IERC20(_0xTGuildContract).balanceOf(address(this));
-                        if(totalOwed >= (111000))
-                        {
-                        totalOwed = (24 * totalOwed).div(111000);  //105,000 epochs = half of era, 5x the reward for 1/5 of the time
-                        IERC20(_0xTGuildContract).transfer(msg.sender, totalOwed);
-                        
-                    }
-                }
-            }
+            
 
 
 
-            _setBalance(msg.sender, (_balanceOf(msg.sender) + reward_amount));
-            emit Transfer(address(0), msg.sender, reward_amount);
+            _transferFrom(address(this), address(this), msg.sender, reward_amount, false);
                 
 
            return true;
@@ -1003,7 +1013,7 @@ function mintExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFu
             {
                 require(mint(nonce,challenge_digest), "mint issue");
             }
-            require(ExtraFunds != _0xTGuildContract, "Not this contract please choose another");
+            require(ExtraFunds != PMBTCGuildContract, "Not this contract please choose another");
             if(epochCount % 2 == 0)
             {      
                 uint256 totalOwned = IERC20(ExtraFunds).balanceOf(address(this));
@@ -1018,12 +1028,12 @@ function mintExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFu
 function mintExtraExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFunds, address ExtraFunds2) public returns (bool success) {
     require(Titan, "Whitelist it!");  //, "get on the list!");
     require(mintExtraToken(nonce, challenge_digest, ExtraFunds, ExtraOn), "Nuhuhuh0");
-    require(ExtraFunds2 != _0xTGuildContract, "Not this contract please choose another");
+    require(ExtraFunds2 != PMBTCGuildContract, "Not this contract please choose another");
     require(ExtraFunds != ExtraFunds2, "annoying");
-    if(epochCount % 4 == 0)
+    if(epochCount % 3 == 0)
     {
         uint256 totalOwned = IERC20(ExtraFunds2).balanceOf(address(this));
-        totalOwned = (4 * totalOwned).div(100000);  //100,000 epochs = half of era, 5x the reward for 1/5 of the time
+        totalOwned = (3 * totalOwned).div(100000);  //100,000 epochs = half of era, 3x the reward for 1/3 of the time //no round ends here
         IERC20(ExtraFunds2).transfer(msg.sender, totalOwned);
         }
         return true;
@@ -1035,12 +1045,12 @@ function mintExtraExtraExtraToken(uint256 nonce, bytes32 challenge_digest, addre
     require(mintExtraExtraToken(nonce, challenge_digest, ExtraFunds, ExtraFunds2), "Nuhuhuh0");
     require(ExtraFunds != ExtraFunds3, "annoying1");
     require(ExtraFunds2 != ExtraFunds3, "annoying2");
-    require(_0xTGuildContract != ExtraFunds3, "annoying3");
+    require(PMBTCGuildContract != ExtraFunds3, "annoying3");
     
-    if(epochCount % 8 == 0)
+    if(epochCount % 7 == 0)
     {
         uint256 totalOwned = IERC20(ExtraFunds3).balanceOf(address(this));
-        totalOwned = (8 * totalOwned).divRound(100000);  //100,000 epochs = half of era, 5x the reward for 1/5 of the time
+        totalOwned = (7 * totalOwned).divRound(100000);  //100,000 epochs = half of era, 7x the reward for 1/7 of the time
         IERC20(ExtraFunds3).transfer(msg.sender, totalOwned);
         }
         return true;
@@ -1054,11 +1064,11 @@ function mintExtraExtraExtraExtraToken(uint256 nonce, bytes32 challenge_digest, 
     require(ExtraFunds != ExtraFunds4, "annoying5");
     require(ExtraFunds2 != ExtraFunds4, "annoying 2 and 4");
     require(ExtraFunds3 != ExtraFunds4, "annoying 3 and 4");
-    require(_0xTGuildContract != ExtraFunds4, "annoying");
-    if(epochCount % 16 == 0)
+    require(PMBTCGuildContract != ExtraFunds4, "annoying");
+    if(epochCount % 13 == 0)
     {
         uint256 totalOwned = IERC20(ExtraFunds4).balanceOf(address(this));
-        totalOwned = (16 * totalOwned).divRound(100000);  //100,000 epochs = half of era, 5x the reward for 1/5 of the time
+        totalOwned = (13 * totalOwned).divRound(100000);  //100,000 epochs = half of era, 13x the reward for 1/16 of the time
         IERC20(ExtraFunds4).transfer(msg.sender, totalOwned);
     }
     return true;
@@ -1073,12 +1083,12 @@ function mintNewsPaperToken(uint256 nonce, bytes32 challenge_digest, address Ext
     require(ExtraFunds != ExtraFunds5, "annoying");
     require(ExtraFunds2 != ExtraFunds5, "annoying 2 and 5");
     require(ExtraFunds3 != ExtraFunds5, "annoying 3 and 5");
-    require(_0xTGuildContract != ExtraFunds5, "annoying");
+    require(PMBTCGuildContract != ExtraFunds5, "annoying");
     require(ExtraFunds4 != ExtraFunds5, "annoying 4 and 5");
-    if(epochCount % 32 == 0)
+    if(epochCount % 23 == 0)
     {
         uint256 totalOwned = IERC20(ExtraFunds5).balanceOf(address(this));
-        totalOwned = (32 * totalOwned).divRound(100000);  //100,000 epochs = half of era, 5x the reward for 1/5 of the time
+        totalOwned = (23 * totalOwned).divRound(100000);  //100,000 epochs = half of era, 32x the reward for 1/32 of the time
         IERC20(ExtraFunds5).transfer(msg.sender, totalOwned);
     }
     return true;
@@ -1086,7 +1096,7 @@ function mintNewsPaperToken(uint256 nonce, bytes32 challenge_digest, address Ext
 
 function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) public returns (bool success) {
     
-        require(address(this) != mintED && address(_0xTGuildContract) != mintED);
+        require(address(this) != mintED && address(PMBTCGuildContract) != mintED);
 
             bytes32 digest =  keccak256(abi.encodePacked(challengeNumber, msg.sender, nonce));
 
@@ -1097,7 +1107,7 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
             if(uint256(digest) > miningTarget) revert();
           
             
-            IERC20(mintED).transfer(msg.sender, (IERC20(mintED).balanceOf(address(this))).div(10000));  //allow only one other token to be minted without reprocussions 210000 is close to a halving amount.
+            IERC20(mintED).transfer(msg.sender, (IERC20(mintED).balanceOf(address(this))).divRound(10000)); 
 
             tokensMinted = tokensMinted.add(reward_amount);
 
@@ -1211,10 +1221,11 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
 
 
     //31.1m coins total
+    // = 
     //21 million proof of work
-    //10 million proof of burn
-    //500,000-1 million token airdrop to 0xBTC, Kiwi, BSOV, Shuffle, Vether, BNBTC, and BNBSOV
-    //reward begins at 50 and is cut in half every reward era (as tokens are mined)
+    // + 
+    //11.1 million proof of burn
+    //reward begins at 50 tokens per and is cut in half every reward era(3-4 years)
 
     
     function getMiningReward() public view returns (uint) {
