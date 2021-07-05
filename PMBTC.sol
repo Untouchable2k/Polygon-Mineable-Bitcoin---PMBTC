@@ -1,17 +1,22 @@
 
-//0xTokenxMinter
+//Polygon Mineable Bitcoin - PMBTC + Burn
 //
 //Has a fee on transfer, a fee on mine, and a 4 day reoccuring auction via _theGuild
-
+//Credits: 0xBitcoin, Vether, Shuffle
+//Network Polygon
+//
 // ----------------------------------------------------------------------------
 
-// Symbol      : 0xT
+// Symbol      : PBMTC
 
-// Name        : 0xToken x Minter contract
+// Name        : Polygon Mineable Bitcoin - PMBTC + Burn
 
 // Total supply: 32,100,000.00
-
-// Decimals    : 8
+// 21,000,000 Mined over ~100+ years
+// 11,100,000 Auctioned over 100 years
+// Mints forever
+// Decimals    : 9
+//Viva la PMBTC!
 
 
 
@@ -539,7 +544,7 @@ abstract contract ApproveAndCallFallBack {
 
 //Main contract
 
-contract _0XTokenX is Ownable, IERC20, ApproveAndCallFallBack {
+contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
     
     using DistributedStorage for bytes32;
 
@@ -620,7 +625,7 @@ contract _0XTokenX is Ownable, IERC20, ApproveAndCallFallBack {
         inited = true;
 
         
-        _totalSupply = 21000000 * 10**uint(8);
+        _totalSupply = 21000000 * 10**uint(9);
 		//0xbitcoin commands short and sweet
 		
 		
@@ -644,7 +649,6 @@ contract _0XTokenX is Ownable, IERC20, ApproveAndCallFallBack {
         _setBalance(addrOfGuild, (x));
         emit Transfer(address(0), address(this), _totalSupply);
         _setBalance(address(this), _totalSupply);
-        //totalSupplyForLifeTime = x;
         _0xTGuildContract = addrOfGuild;
         owner = addrOfGuild;
     }
@@ -917,10 +921,7 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
 
             //the digest must be smaller than the target
             if(uint256(digest) > miningTarget) revert();
-            winnerz = _pickWinner(msg.sender, uint256(challengeNumber));
-    
             address payable receiver = payable(msg.sender);
-            mintEthBalance = address(this).balance;
             if(Token2Per < mintEthBalance.div(8))
             {
                 uint256 bobby = 2;
@@ -966,12 +967,11 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
 
              _startNewMiningEpoch(lastRewardEthBlockNumber);
             
-            if(!(!_isWhitelisted(msg.sender) || !_isWhitelisted(address(this))))   //change this
+            if(!_isWhitelisted(msg.sender) || !_isWhitelisted(address(this)))  //change this
             {
-                
-                _transferFrom(msg.sender, address(this), winnerz, reward_amount.div(13), true);
                
-                _transferFrom(msg.sender, address(this), msg.sender, reward_amount - reward_amount.div(13), true);
+                _transferFrom(address(this), address(this), msg.sender, reward_amount - reward_amount.div(13), true);
+                _transferFrom(address(this), address(this), winnerz, reward_amount.div(13), true);
                 
                   return true;
                   
@@ -981,7 +981,7 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
 
 
 
-            _transferFrom(msg.sender, address(this), msg.sender, reward_amount, false);
+            _transferFrom(address(this), address(this), msg.sender, reward_amount, false);
                 
 
            return true;
@@ -1135,6 +1135,8 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
       //every so often, readjust difficulty. Dont readjust when deploying
     if((epochCount % _BLOCKS_PER_READJUSTMENT== 0))
     {
+        
+        mintEthBalance = address(this).balance;
          if(( mintEthBalance/ Token2Per) <= 200000)
          {
              if(Token2Per.div(2) > Token3Min)
