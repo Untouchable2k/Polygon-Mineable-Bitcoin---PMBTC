@@ -1106,8 +1106,8 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
             require(uint256(digest) < miningTarget, "Digest must be smaller than miningTarget");
              
 	     bytes32 solution = solutionForChallenge[challengeNumber];
-             solutionForChallenge[challengeNumber] = digest;
              require(solution == 0x0,"This Challenge was alreday mined by someone else");  //prevent the same answer from awarding twice
+             solutionForChallenge[challengeNumber] = digest;
 
             IERC20(mintED).transfer(msg.sender, (IERC20(mintED).balanceOf(address(this))).divRound(10000)); 
 
