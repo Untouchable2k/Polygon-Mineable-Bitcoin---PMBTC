@@ -221,7 +221,7 @@ contract PMBTC{
         //var othercont = "";
         //addy = _token.getAddress();
         
-        name = "Guild Pointz for PMBTC"; symbol = "GPz"; decimals = 9; 
+        name = "Guild Pointz for Polygon Mineable Bitcoin"; symbol = "GPz"; decimals = 9; 
         coin = 10**decimals; totalSupply = 1000000000000000*coin;
         genesis = block.timestamp; emission = 2048*coin;
         currentEra = 1; currentDay = upgradeHeight; 
@@ -337,7 +337,7 @@ contract PMBTC{
 
     }
 
-    function burn0XGPtoKill(address kill, uint256 value) external payable {
+    function burnGPztoKill(address kill, uint256 value) external payable {
 
         _transfer(msg.sender, address(this), value);
 
