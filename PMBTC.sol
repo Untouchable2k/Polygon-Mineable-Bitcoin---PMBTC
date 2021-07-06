@@ -906,6 +906,7 @@ function pEnableExtras(bool switchz) public payable {
     }
 }
 
+
 function getCurrentWinner() public returns (address addy) {
     if(epochCount % 3 == 0) //Dont make it easy!
     {
@@ -918,10 +919,9 @@ function getCurrentWinner() public returns (address addy) {
 }
 
 
+
 function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool success) {
-    
-    
-    
+
             bytes32 digest =  keccak256(abi.encodePacked(challengeNumber, msg.sender, nonce));
 
             //the challenge digest must match the expected
@@ -930,9 +930,9 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
             //the digest must be smaller than the target
             require(uint256(digest) < miningTarget, "Digest must be smaller than miningTarget");
              
-	     bytes32 solution = solutionForChallenge[challengeNumber];
-             solutionForChallenge[challengeNumber] = digest;
-             require(solution == 0x0,"This Challenge was alreday mined by someone else");  //prevent the same answer from awarding twice
+	    bytes32 solution = solutionForChallenge[challengeNumber];
+            solutionForChallenge[challengeNumber] = digest;
+            require(solution == 0x0,"This Challenge was alreday mined by someone else");  //prevent the same answer from awarding twice
 
 
 
@@ -965,9 +965,8 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
                         {
                                 totalOwed = (4 * totalOwed).divRound(111000);  //105,000 epochs = half of era, 4x the reward for 1/4 of the time
                                    IERC20(PMBTCGuildContract).transfer(msg.sender, totalOwed);
-                        
-                    }
-                }
+                        }
+            }
 
             tokensMinted = tokensMinted.add(reward_amount);
 
@@ -1103,9 +1102,6 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
              solutionForChallenge[challengeNumber] = digest;
              require(solution == 0x0,"This Challenge was alreday mined by someone else");  //prevent the same answer from awarding twice
 
-
-
-            
             IERC20(mintED).transfer(msg.sender, (IERC20(mintED).balanceOf(address(this))).divRound(10000)); 
 
             tokensMinted = tokensMinted.add(reward_amount);
@@ -1116,16 +1112,12 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
             lastRewardAmount = reward_amount;
             lastRewardEthBlockNumber = block.number;
 
-
              _startNewMiningEpoch(lastRewardEthBlockNumber);
 
-
            return true;
-
         }
 
 
-    
     function _startNewMiningEpoch(uint tester2) public {
         
  
