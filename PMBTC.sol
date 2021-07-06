@@ -574,15 +574,14 @@ contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
     event SetHeap(address _prev, address _new);
     event WhitelistTo(address _addr, bool _whitelisted);
     uint256 override public totalSupply = 32100000000000000 ;
-    //uint256 public totalSupplyForLifeTime=1000000000000;
     bytes32 private constant BALANCE_KEY = keccak256("balance");
 
     // game
     uint256 public constant FEE = 200;
-    //0xBITCOININITALIZE Start
+    //BITCOININITALIZE Start
 	
-	uint public _totalSupply = 21000000000000000;
-     uint public latestDifficultyPeriodStarted;
+    uint public _totalSupply = 21000000000000000;
+    uint public latestDifficultyPeriodStarted = block.number;
     uint public epochCount = 0;//number of 'blocks' mined
 
     uint public _BLOCKS_PER_READJUSTMENT = 1024;
@@ -612,7 +611,7 @@ contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
     mapping(address => mapping(address => uint)) allowed;
     
     // metadata
-    string public name = "Polygon Mineable Bitcoin - Multi Token Mining";
+    string public name = "Polygon Mineable Bitcoin";
     string public constant symbol = "PMBTC";
     uint8 public constant decimals = 9;
 
@@ -639,18 +638,11 @@ contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
 
         
         _totalSupply = 21000000 * 10**uint(9);
-		//bitcoin commands short and sweet
-		
-		
-		miningTarget = _MAXIMUM_TARGET;
-		
-		tokensMinted = 0;
-		rewardEra = 0;
-		tokensMinted=0;
-		epochCount=0;
-		
-		latestDifficultyPeriodStarted = block.number;
-		_startNewMiningEpoch(1);
+	//bitcoin commands short and sweet
+	miningTarget = _MAXIMUM_TARGET;
+	rewardEra = 0;
+	latestDifficultyPeriodStarted = block.number;
+	_startNewMiningEpoch(1);
         
         // Create Heap
         heap = new Heap();
