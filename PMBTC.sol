@@ -37,7 +37,8 @@
 
 //Viva la Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will reward a miner with it!
 
-
+//pThirdDifficulty allows for the difficulty to be cut in a third.  So difficulty 10,000 becomes 3,333.  Costs 400 Polygon for era 1
+//pHeapClear allows for the heap to be emptied and restart.  Costs 100 Polygon for era 1
 
 contract Ownable {
     address public owner;
@@ -855,16 +856,17 @@ function getNewWinner() public returns (address){
     return winnerz;
 }
 
+//Restarts the Heap for 100 Matic
 function PNewHeap() public payable {
     require(msg.value >= 100*oneNineDigit * reward_amount.divRound(50), "Must send Matic");
     heap = new Heap();
     emit SetHeap(address(0), address(heap));
 }
 
-//3x Easier difficulty in mining 
+//3x Easier difficulty in mining costs 500 matic
 function pThirdDifficulty() public payable {
     require(IERC20(PMBTCGuildContract).balanceOf(msg.sender) >= (100 * (reward_amount.divRound(50))), "Must have larger balance of HPz, first era is 100 matic spent in the guild contract");//  //costs 80 matic spent to reset ThirdDifficulty
-    require(msg.value >= 400*oneNineDigit * reward_amount.div(50), "Must send more Matic to lower difficulty by 3x, first era is 400 matic");  
+    require(msg.value >= 500* oneEthDigit, "Must send more Matic to lower difficulty by 3x, Costs 500 matic");  
             
 	    miningTarget = miningTarget.mult(3);
 	    
