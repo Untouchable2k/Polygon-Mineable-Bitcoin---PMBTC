@@ -1175,7 +1175,6 @@ function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) publi
     //https://en.bitcoin.it/wiki/Difficulty#What_is_the_formula_for_difficulty.3F
     //as of 2017 the bitcoin difficulty was up to 17 zeroes, it was only 8 in the early days
 
-    //readjust the target by 5 percent
     function _reAdjustDifficulty() internal {
 
         
