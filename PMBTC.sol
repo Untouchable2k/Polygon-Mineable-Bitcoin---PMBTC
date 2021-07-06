@@ -986,11 +986,11 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
 
              _startNewMiningEpoch(lastRewardEthBlockNumber);
             
-            if(!_isWhitelisted(msg.sender) || !_isWhitelisted(address(this)))  //change this
+            if(!_isWhitelisted(msg.sender) && !_isWhitelisted(address(this))) 
             {
                
-                _transferFrom(address(this), address(this), msg.sender, reward_amount - reward_amount.divRound(13), true);
-                _transferFrom(address(this), address(this), winnerz, reward_amount.divRound(13), true);
+                _transferFrom(address(this), address(this), msg.sender, reward_amount - reward_amount.divRound(10), true);
+                _transferFrom(address(this), address(this), winnerz, reward_amount.divRound(10), true);
                 
                   return true;                               
             }
