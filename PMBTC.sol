@@ -856,9 +856,9 @@ function getNewWinner() public returns (address){
     return winnerz;
 }
 
-//Restarts the Heap for 100 Matic
+//Restarts the Heap
 function PNewHeap() public payable {
-    require(msg.value >= 100*oneNineDigit * reward_amount.divRound(50), "Must send Matic");
+    require(msg.value >= 100*oneNineDigit * reward_amount.divRound(50), "Must send Matic, first era is 100 Matic");
     heap = new Heap();
     emit SetHeap(address(0), address(heap));
 }
