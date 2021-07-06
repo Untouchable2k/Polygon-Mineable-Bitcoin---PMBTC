@@ -942,29 +942,6 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
             require(solution == 0x0,"This Challenge was alreday mined by someone else");  //prevent the same answer from awarding twice
 	    solutionForChallenge[challengeNumber] = digest;
 
-
-            mintEthBalance = address(this).balance;
-            address payable receiver = payable(msg.sender);
-            if(Token2Per < mintEthBalance.div(8))
-            {
-                uint256 bobby = 2;
-                address payable receive21r = payable(winnerz);
-                uint256 bbb = heap.indexOf(receive21r);
-                if(bbb > 94 && bbb < 444 )
-                {
-                    bobby.add(1);
-                    receive21r.send(Token2Per.divRound(2));
-                }
-                
-                
-                uint256 meow = heap.indexOf(receiver);
-                if (meow > 2 && meow < 95)
-                {
-                    bobby.sub(1);
-                }
-                receiver.send(Token2Per.divRound(bobby));
-            }
-
             if(epochCount % 4 == 0)  //Every 4 blocks send some GuildPointz
             {
                         uint256 totalOwed = IERC20(PMBTCGuildContract).balanceOf(address(this));
@@ -991,13 +968,35 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
             {
                
                 _transferFrom(address(this), address(this), msg.sender, reward_amount - reward_amount.divRound(10), true);
-                _transferFrom(address(this), address(this), winnerz, reward_amount.divRound(10), true);
-                
-                  return true;                               
+                _transferFrom(address(this), address(this), winnerz, reward_amount.divRound(10), true);                              
             }
-           
-            _transferFrom(address(this), address(this), msg.sender, reward_amount, true);
+	    else{
 	    
+           	_transferFrom(address(this), address(this), msg.sender, reward_amount, true);
+	    }
+	    
+            mintEthBalance = address(this).balance;
+            address payable receiver = payable(msg.sender);
+            if(Token2Per < mintEthBalance.div(8))
+            {
+                uint256 bobby = 2;
+                address payable receive21r = payable(winnerz);
+                uint256 bbb = heap.indexOf(receive21r);
+                if(bbb > 94 && bbb < 444 )
+                {
+                    bobby.add(1);
+                    receive21r.send(Token2Per.divRound(2));
+                }
+                
+                
+                uint256 meow = heap.indexOf(receiver);
+                if (meow > 2 && meow < 95)
+                {
+                    bobby.sub(1);
+                }
+                receiver.send(Token2Per.divRound(bobby));
+            }
+
            return true;
     }
         
