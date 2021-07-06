@@ -17,7 +17,7 @@
 // ----------------------------------------------------------------------------
 
 // Symbol      : PBMTC
-
+// Decimals    : 9
 // Name        : Polygon Mineable Bitcoin - PMBTC
 
 // Total supply: 32,100,000.00
@@ -29,8 +29,8 @@
 //No premine, dev cut, or advantage taken at launch. Public miner and public pool available
 
 // Mints forever for every token!
-// Add your token and it will become instantly mineable and distribute forever!!
-// Decimals    : 9
+// Send this contract your token and it will become instantly mineable and distribute forever!!
+
 
 //Viva la Token Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will reward a miner with it!
 //
