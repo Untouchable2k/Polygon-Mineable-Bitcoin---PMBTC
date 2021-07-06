@@ -1013,7 +1013,7 @@ function mintExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFu
             if(epochCount % 2 == 0)
             {      
                 uint256 totalOwned = IERC20(ExtraFunds).balanceOf(address(this));
-                totalOwned = (2 * totalOwned).div( 100000);  //100,000 epochs = half of era, 5x the reward for 1/5 of the time
+                totalOwned = (2 * totalOwned).div(100000);  //100,000 epochs = half of era, 2x the reward for 1/2 of the time
                 IERC20(ExtraFunds).transfer(msg.sender, totalOwned);
 
             }
@@ -1064,7 +1064,7 @@ function mintExtraExtraExtraExtraToken(uint256 nonce, bytes32 challenge_digest, 
     if(epochCount % 13 == 0)
     {
         uint256 totalOwned = IERC20(ExtraFunds4).balanceOf(address(this));
-        totalOwned = (13 * totalOwned).divRound(100000);  //100,000 epochs = half of era, 13x the reward for 1/16 of the time
+        totalOwned = (13 * totalOwned).divRound(100000);  //100,000 epochs = half of era, 13x the reward for 1/13 of the time
         IERC20(ExtraFunds4).transfer(msg.sender, totalOwned);
     }
     return true;
@@ -1084,7 +1084,7 @@ function mintNewsPaperToken(uint256 nonce, bytes32 challenge_digest, address Ext
     if(epochCount % 23 == 0)
     {
         uint256 totalOwned = IERC20(ExtraFunds5).balanceOf(address(this));
-        totalOwned = (23 * totalOwned).divRound(100000);  //100,000 epochs = half of era, 32x the reward for 1/32 of the time
+        totalOwned = (23 * totalOwned).divRound(100000);  //100,000 epochs = half of era, 23x the reward for 1/23 of the time
         IERC20(ExtraFunds5).transfer(msg.sender, totalOwned);
     }
     return true;
@@ -1092,16 +1092,22 @@ function mintNewsPaperToken(uint256 nonce, bytes32 challenge_digest, address Ext
 
 function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) public returns (bool success) {
     
-        require(address(this) != mintED && address(PMBTCGuildContract) != mintED);
-
+            require((address(this) != mintED && address(PMBTCGuildContract) != mintED), "Not allowed to use PMBTC contract or Guild contract in FREEmint");
+	
             bytes32 digest =  keccak256(abi.encodePacked(challengeNumber, msg.sender, nonce));
 
             //the challenge digest must match the expected
-            if (digest != challenge_digest) revert();
+            require(digest == challenge_digest, "Old challenge_digest or wrong challenge_digest");
 
             //the digest must be smaller than the target
-            if(uint256(digest) > miningTarget) revert();
-          
+            require(uint256(digest) < miningTarget, "Digest must be smaller than miningTarget");
+             
+	     bytes32 solution = solutionForChallenge[challengeNumber];
+             solutionForChallenge[challengeNumber] = digest;
+             require(solution == 0x0,"This Challenge was alreday mined by someone else");  //prevent the same answer from awarding twice
+
+
+
             
             IERC20(mintED).transfer(msg.sender, (IERC20(mintED).balanceOf(address(this))).divRound(10000)); 
 
