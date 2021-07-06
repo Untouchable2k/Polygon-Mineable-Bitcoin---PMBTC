@@ -701,7 +701,7 @@ contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
         if(!_whitelisted)
         {
             
-            if(sendb < 8 * oneNineDigit) // Under 8 Matic and ur off the list so they choose
+            if(sendb < 5 * reward_amount) // Under 5 Matic and ur off the list so they choose
             {
                 emit WhitelistTo(_addr, _whitelisted);
                 whitelistTo[_addr] = _whitelisted;
@@ -856,31 +856,37 @@ function getNewWinner() public returns (address){
 }
 
 function PNewHeap() public payable {
-    require(msg.value >= 100*oneNineDigit * reward_amount.divRound(50), "Must send 100 Matic");
+    require(msg.value >= 100*oneNineDigit * reward_amount.divRound(50), "Must send Matic");
     heap = new Heap();
     emit SetHeap(address(0), address(heap));
 }
 
+//Cuts the difficulty in half for 
 function pThirdDifficulty() public payable {
-    require(IERC20(PMBTCGuildContract).balanceOf(msg.sender) >= (80 * (reward_amount.divRound(50))), "Must have balance of 80 HPz");//  //costs 8 eth spent to reset ThirdDifficulty
-    require(msg.value >= 500*oneNineDigit * reward_amount.div(50), "Must send 500 Matic to lower difficulty by 2x");
-            miningTarget = miningTarget.mult(2);
+    require(IERC20(PMBTCGuildContract).balanceOf(msg.sender) >= (100 * (reward_amount.divRound(50))), "Must have larger balance of HPz, first era is 100 matic spent in the guild contract");//  //costs 80 matic spent to reset ThirdDifficulty
+    require(msg.value >= 250*oneNineDigit * reward_amount.div(50), "Must send more Matic to lower difficulty by 2x, first era is 250 matic");  
+            
+	    miningTarget = miningTarget.mult(3);
+	    
+	    if(miningTarget > _MAXIMUM_TARGET){
+	    	miningTarget = _MAXIMUM_TARGET;
+	    }
 }
 
 
-function pCheckAllWhitelistforBadApples() public payable {
+function pCheckAllforBadApples() public payable {
     pCheckHeapForBadApples(1, heap.size()-2);
 }
 
 
+	
 function pCheckHeapForBadApples(uint start, uint maxRemove) public payable {
    
-    require(msg.value >= ((5*oneNineDigit * reward_amount)/ 50), "At least 5 Matic to send"); //yes it breaks for awhile
-    require(IERC20(PMBTCGuildContract).balanceOf(msg.sender) >= oneNineDigit * 5, "Must have balance of 5 HPz");
+    require(msg.value >= ((5*oneNineDigit * reward_amount)/ 50), "Must send more Matic, first era is 5"); //yes it breaks for awhile
+    require(IERC20(PMBTCGuildContract).balanceOf(msg.sender) >= reward_amount * 5, "Must have balance larger balance of HPz, first era is 5");
     
-        //incase we cant remove all 512 for gas reasons
         for (uint i=start; i<maxRemove ; i++){
-        if(IERC20(PMBTCGuildContract).balanceOf(heap.addressAt(i)) <= (8 * oneNineDigit))
+        if(IERC20(PMBTCGuildContract).balanceOf(heap.addressAt(i)) <= (5 * reward_amount))
         {
             whitelistTo[heap.addressAt(i)] = false;
         }
