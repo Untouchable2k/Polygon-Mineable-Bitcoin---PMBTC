@@ -3,13 +3,13 @@
 //
 // Contract is able to print multiple cryptocurrencies at once.
 //
-// Top 512 holders recieve 8% of mining payouts until a miner whitelists themselves.
+// Top 512 holders recieve 10% of mining payouts until a miner whitelists themselves.
 //    +
 // Top 512 holders recieve 1% of every transfer
 //    +
 // 1% of every transfer is burned to TheGuild in order to benefit everyone
 //    =
-// 10% of every minted block is distributed
+// 12% of every minted block is distributed
 //
 // Heap Spots 2-98 reieve double mining payouts of Matic (miners)
 // Heap Spots 98-488 recieve payouts of MATIC randomly (holders)!!
