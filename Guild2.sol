@@ -8,7 +8,7 @@
 
 //Distributes ~25,000 PMBTC every 4 days for the first era and halves every era after that
 
-//First 5 auctions(4 day periods) are reduced to allow fair entry. ~20 days.
+//First 5 auctions(4 day periods) are reduced to allow fair entry(10,000 coins). ~20 days.
 
 //Send MATIC directly to contract or use an interface to recieve your piece of that 25,000 PMBTC every 4 days.
 
