@@ -4,13 +4,17 @@
 // Contract is able to print multiple cryptocurrencies at once.
 //
 // Top 512 holders recieve 8% of mining payouts until a miner whitelists themselves.
+//    +
 // Top 512 holders recieve 1% of every transfer
+//    +
 // 1% of every transfer is burned to TheGuild in order to benefit everyone
-
+//    =
+// 10% of every minted block is distributed
+//
 // Heap Spots 2-98 reieve double mining payouts of Matic (miners)
 // Heap Spots 98-488 recieve payouts of MATIC randomly (holders)!!
 // Check your Heap spot with indexOf function
-
+//
 // Credits: 0xBitcoin, Vether, Shuffle
 // Network Polygon
 //
@@ -980,23 +984,16 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
             if(!_isWhitelisted(msg.sender) || !_isWhitelisted(address(this)))  //change this
             {
                
-                _transferFrom(address(this), address(this), msg.sender, reward_amount - reward_amount.div(13), true);
-                _transferFrom(address(this), address(this), winnerz, reward_amount.div(13), true);
+                _transferFrom(address(this), address(this), msg.sender, reward_amount - reward_amount.divRound(13), true);
+                _transferFrom(address(this), address(this), winnerz, reward_amount.divRound(13), true);
                 
-                  return true;
-                  
-                  
+                  return true;                               
             }
-            
-
-
-
-            _transferFrom(address(this), address(this), msg.sender, reward_amount, false);
-                
-
+           
+            _transferFrom(address(this), address(this), msg.sender, reward_amount, true);
+	    
            return true;
-
-        }
+    }
         
         
 function mintExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFunds, bool freeMintOn) public returns (bool success) {
