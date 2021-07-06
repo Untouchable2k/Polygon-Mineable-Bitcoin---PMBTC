@@ -24,7 +24,7 @@
 //   =
 // 21,000,000 Mined over ~100+ years using Bitcoins Distrubtion halvings every 4 years
 //   +
-// 11,100,000 Auctioned over 100 years in 4 day auctions split fairly among all buyers, similar to vether, halvings every 4 years
+// 11,100,000 Auctioned over 100 years in 4 day auctions split fairly among all buyers, ALL Auction proceeds go back into Miners pockets via the contract!!!
 
 // No premine, dev cut, or advantage taken at launch. Public miner and public pool available at launch.
 
