@@ -33,7 +33,7 @@
 // No premine, dev cut, or advantage taken at launch. Public miner and public pool available at launch.
 
 // Mints forever for every token!
-// Send this contract your token and it will become instantly mineable and distribute forever!!
+// Send this contract any ERC20 token and it will become instantly mineable and distribute forever!!
 
 //Viva la Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will reward a miner with it!
 
