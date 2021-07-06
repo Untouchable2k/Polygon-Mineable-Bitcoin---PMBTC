@@ -1,18 +1,18 @@
 
-//Polygon Mineable Bitcoin - PMBTC
+// Polygon Mineable Bitcoin - PMBTC
 //
 // Contract is able to print multiple cryptocurrencies at once.
 //
-//Top 512 holders recieve 8% of mining payouts until a miner whitelists themselves.
-//Top 512 holders recieve 1% of every transfer
-// 1% of every transfer is burned to TheGuild in order to benifit everyone
+// Top 512 holders recieve 8% of mining payouts until a miner whitelists themselves.
+// Top 512 holders recieve 1% of every transfer
+// 1% of every transfer is burned to TheGuild in order to benefit everyone
 
-//Heap Spots 2-98 reieve double mining payouts of Matic (miners)
-//Heap Spots 98-488 recieve payouts of MATIC randomly (holders)!!
-//check your Heap spot with indexOf function
+// Heap Spots 2-98 reieve double mining payouts of Matic (miners)
+// Heap Spots 98-488 recieve payouts of MATIC randomly (holders)!!
+// Check your Heap spot with indexOf function
 
-//Credits: 0xBitcoin, Vether, Shuffle
-//Network Polygon
+// Credits: 0xBitcoin, Vether, Shuffle
+// Network Polygon
 //
 // ----------------------------------------------------------------------------
 
@@ -26,14 +26,13 @@
 //   +
 // 11,100,000 Auctioned over 100 years in 4 day auctions split fairly among all buyers, similar to vether, halvings every 4 years
 
-//No premine, dev cut, or advantage taken at launch. Public miner and public pool available
+// No premine, dev cut, or advantage taken at launch. Public miner and public pool available at launch.
 
 // Mints forever for every token!
 // Send this contract your token and it will become instantly mineable and distribute forever!!
 
 
 //Viva la Token Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will reward a miner with it!
-//
 
 
 
