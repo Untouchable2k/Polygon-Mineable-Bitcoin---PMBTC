@@ -37,7 +37,8 @@
 
 //Viva la Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will reward a miner with it!
 
-//pThirdDifficulty allows for the difficulty to be cut in a third.  So difficulty 10,000 becomes 3,333.  Costs 400 Polygon for era 1
+//pThirdDifficulty allows for the difficulty to be cut in a third.  So difficulty 10,000 becomes 3,333.  Costs 400 Polygon
+
 //pHeapClear allows for the heap to be emptied and restart.  Costs 100 Polygon for era 1
 
 contract Ownable {
