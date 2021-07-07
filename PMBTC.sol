@@ -41,6 +41,9 @@
 
 //pHeapClear allows for the heap to be emptied and restart.  Costs 100 Polygon for era 1
 
+
+pragma solidity ^0.7.6;
+
 contract Ownable {
     address public owner;
 
