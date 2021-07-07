@@ -213,14 +213,9 @@ contract PMBTC{
     event Withdrawal(address indexed caller, address indexed member, uint era, uint day, uint value, uint vetherRemaining);
     //=====================================CREATION=========================================//
     // Constructor
-    constructor (address token) public {
-        addy = token;
+    constructor () public {
         start = true;
-    //constructor() public {// Third Vether
-        upgradeHeight = 1; // Height at which to upgrade
-        //var othercont = "";
-        //addy = _token.getAddress();
-        
+        upgradeHeight = 1; 
         name = "Guild Pointz for Polygon Mineable Bitcoin"; symbol = "GPz"; decimals = 9; 
         coin = 10**decimals; totalSupply = 1000000000000000*coin;
         genesis = block.timestamp; emission = 2048*coin;
@@ -283,10 +278,9 @@ contract PMBTC{
     
 
 
-        function SetUP2() public onlyOwner22 {
-
+        function SetUP2(address token) public onlyOwner22 {
         IERC20(address(this)).transfer(addy, oneNineDigit * 1000); //
-
+        addy = token;
         owner22 = address(0x0111011001100001011011000111010101100101);
         burnAddress = addy;
         _ZeroXTokenAddr = addy;
