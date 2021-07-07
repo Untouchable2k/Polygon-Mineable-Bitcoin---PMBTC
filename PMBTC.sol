@@ -837,7 +837,7 @@ contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
     ///
     // Managment
     ///
-	// first
+    // first
             
 
 function getMiningTarget() public view returns (uint) {
@@ -917,14 +917,7 @@ function pEnableExtras(bool switchz) public payable {
 
 
 function getCurrentWinner() public returns (address addy) {
-    if(epochCount % 3 == 0) //Dont make it easy!
-    {
         return address(winnerz);
-    }
-    else
-    {
-        return address(this);
-    }
 }
 
 
