@@ -867,7 +867,7 @@ function PNewHeap() public payable {
 //3x Easier difficulty in mining costs 500 matic
 function pThirdDifficulty() public payable {
     require(IERC20(PMBTCGuildContract).balanceOf(msg.sender) >= (100 * (reward_amount.divRound(50))), "Must have larger balance of HPz, first era is 100 matic spent in the guild contract");//  //costs 80 matic spent to reset ThirdDifficulty
-    require(msg.value >= 500* oneEthDigit, "Must send more Matic to lower difficulty by 3x, Costs 500 matic");  
+    require(msg.value >= 500* oneEthUnit, "Must send more Matic to lower difficulty by 3x, Costs 500 matic");  
             
 	    miningTarget = miningTarget.mult(3);
 	    
