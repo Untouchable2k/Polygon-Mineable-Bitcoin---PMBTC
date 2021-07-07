@@ -606,9 +606,9 @@ contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
     address public PMBTCGuildContract;
        uint256 oneEthUnit = 1000000000000000000;
      uint256 oneNineDigit = 1000000000;
-    uint256 public Token2Per= 88888888888888888;
+    uint256 public Token2Per= 18888888888888888;
     uint256 public mintEthBalance=88;
-    uint256 public Token3Min =88888888888888888;
+    uint256 public Token3Min= 18888888888888888;
     uint256 public lastRewardAmount;
     uint256 public lastRewardEthBlockNumber;
     mapping(bytes32 => bytes32) solutionForChallenge;
