@@ -169,8 +169,8 @@ contract PMBTC{
     uint public SpecialValue=0;
     uint public Reverse;
     uint256 oneEthUnit = 1000000000000000000; 
-    uint256 oneNineDigit = 1000000000;
-    address _ZeroXTokenAddr;
+    uint256 oneNineDigit=1000000000;
+    
     string public name; string public symbol; address addy;
     uint public decimals; uint public override totalSupply;
     // ERC-20 Mappings
@@ -279,11 +279,10 @@ contract PMBTC{
 
 
         function SetUP2(address token) public onlyOwner22 {
-        IERC20(address(this)).transfer(addy, oneNineDigit * 1000); //
         addy = token;
+        IERC20(address(this)).transfer(addy, oneNineDigit * 400); 
         owner22 = address(0x0111011001100001011011000111010101100101);
         burnAddress = addy;
-        _ZeroXTokenAddr = addy;
 
         
 
