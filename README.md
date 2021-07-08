@@ -1,8 +1,10 @@
-# 0xtoken
-0xToken or "0xToken X Mineable X Burn X Shuffle"
+# Polygon Mineable Bitcoin or PMBTC
+PMBTC
 
 
-0xToken X Miner
+Polygon Mineable Bitcoin or PMBTC
+
+Please add your private key to SOLO mine!
 
 All-in-one mixed multi-GPU (nVidia, AMD, Intel) & CPU miner solves proof of work to mine supported EIP918 tokens in a single instance (with API).
 
