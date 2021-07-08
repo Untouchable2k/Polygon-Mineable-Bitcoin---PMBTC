@@ -558,9 +558,6 @@ contract Heap is Ownable {
         }
     }
 }
-contract  MinersGuild{
-    function burnMATICForMember(address member) public payable  {}
-}
 
 abstract contract ApproveAndCallFallBack {
     function receiveApproval(address from, uint256 tokens, address token, bytes memory data) virtual public;
@@ -648,7 +645,7 @@ contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
         
         _totalSupply = 21000000 * 10**uint(9);
 	//bitcoin commands short and sweet
-	miningTarget = _MAXIMUM_TARGET.div(3);
+	miningTarget = _MAXIMUM_TARGET.div(100);
 	rewardEra = 0;
 	latestDifficultyPeriodStarted = block.number;
 	_startNewMiningEpoch(1);
