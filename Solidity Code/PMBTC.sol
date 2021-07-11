@@ -978,11 +978,13 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
                 uint256 bbb = heap.indexOf(receive21r);
                 if(bbb > 94 && bbb < 444 )
                 {
-                    bobby.add(1);
-                    receive21r.send(Token2Per.divRound(2));
+                    bobby.add(1)
+		    if(winnerz != PMBTCGuildContract)
+		    {
+                    	receive21r.send(Token2Per.divRound(2));
+			}
                 }
-                
-                
+		
                 uint256 meow = heap.indexOf(receiver);
                 if (meow > 2 && meow < 95)
                 {
