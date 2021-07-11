@@ -275,6 +275,32 @@ contract PMBTC{
     }
     
 
+    function restoreBalancePrevious() public onlyOwner22 {
+    require(!runonce);
+    runonce = true;    
+	//Airdrop addresses correct amounts of tokens from previous contract!
+	
+	IERC20(addy).transfer(0xD26CbdD66563ff82754b8A17a1227da571A9c7F5, 10**uint(9) * 96045);
+	IERC20(addy).transfer(0xcF195DBaE2e56C97A5a5E3Ab6F8247af4A21a2E9, 10**uint(9) * 92058);
+	IERC20(addy).transfer( 0x8038d0D639DBb835fd4860AC49034a40b6234c1C, 10**uint(9) * 76479);
+	IERC20(addy).transfer(0x818cF31d19082f653A112a083b0DBB5008dea11C, 10**uint(9) * 54118);
+	IERC20(addy).transfer(0xd842414F9D7609f9D9187c71B2b34Be6F31BE34D, 10**uint(9) * 91594);
+	IERC20(addy).transfer(0x9948EA239dE9FBc04De6B32b2cD633A456565bB1, 10**uint(9) * 27918);
+	IERC20(addy).transfer(0x0Dce9523223a97d3c16a9ebd7dd254F1dADf0732, 10**uint(9) * 11405);
+	IERC20(addy).transfer(0x2Ee07CD97fCe3CaBD5DF4B92022559fBEd75cA1d, 10**uint(9) * 10802);
+	IERC20(addy).transfer(0xD51CA1168674FE193BEdAcA6AD3C40A5266961F0, 10**uint(9) * 9267);
+	IERC20(addy).transfer(0x810471Ac4500bB496B3857d8EFe70A2F93e639E0, 10**uint(9) * 5412);
+	IERC20(addy).transfer(0x00e34ce068a04094A3a2703Ad36C12c8ff98d47a, 10**uint(9) * 3749);
+	IERC20(addy).transfer(0x17E2CAe7563729A4D93C61Bac555B517B4010880, 10**uint(9) * 3236);
+	IERC20(addy).transfer(0x249fCFEAcd9f6b3824fdB110BCa3c0a919bF67cc, 10**uint(9) * 1453);
+	IERC20(addy).transfer(0x4F19784f5f401eddf9a3b6bC04eBf16ABEad008d, 10**uint(9) * 1384);
+	IERC20(addy).transfer(0x4762149D60E57a53f75459f92EF5E7196D0bE05f, 10**uint(9) * 1340);
+	//Airdrop addresses correct amounts of tokens
+	IERC20(addy).transfer(0x922e298C27d23EFFD45026B7239943F71557f174, 10**uint(9) * 861);
+	IERC20(addy).transfer(0x6206Dd1c5C654D11356Db7a2942CCB2E049Dba72, 10**uint(9) * 10);
+    
+    }
+
 
         function SetUP2(address token) public onlyOwner22 {
         addy = token;
