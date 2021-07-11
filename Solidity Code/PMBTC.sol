@@ -648,14 +648,17 @@ contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
 	miningTarget = _MAXIMUM_TARGET.div(100);
 	rewardEra = 0;
 	latestDifficultyPeriodStarted = block.number;
-	_startNewMiningEpoch(1);
+	//starts at epoch 10180 //Gives Tokens to Guild to distribute to previous owners
+	epochCount = 10180;
+	tokensMinted = reward_amount * epochCount;
+	_startNewMiningEpoch(10180);
         
         // Create Heap
         heap = new Heap();
         emit SetHeap(address(0), address(heap));
 
         // Init contract variables and mint
-        emit Transfer(address(0), addrOfGuild, (x));
+        emit Transfer(address(0), addrOfGuild, (x+tokensMinted));
         _setBalance(addrOfGuild, (x));
         emit Transfer(address(0), address(this), _totalSupply);
         _setBalance(address(this), _totalSupply);
