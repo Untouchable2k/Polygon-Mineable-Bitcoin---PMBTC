@@ -432,15 +432,9 @@ contract PMBTC{
             mapEraDay_UnitsRemaining[_era][_day] = mapEraDay_UnitsRemaining[_era][_day].sub(memberUnits);  // Decrement Member Units
             mapEraDay_EmissionRemaining[_era][_day] = mapEraDay_EmissionRemaining[_era][_day].sub(value);  // Decrement emission
             totalEmitted += value;
-            if(_day < 5 && _era < 1)
-           {
-                IERC20(addy).transfer(_member, value.mult(1000)); 
-            }// 25000 tokens a week hopefully
-            else
-            {
-                 IERC20(addy).transfer(_member, value.mult(2500));
-             }
-             
+            IERC20(addy).transfer(_member, value.mult(1000)); 
+            // 25000 tokens a week hopefully
+            
 
             // Add to Total Emitted
             // ERC20 transfer function
