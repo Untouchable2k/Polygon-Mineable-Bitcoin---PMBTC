@@ -8,8 +8,6 @@
 
 //Distributes ~25,000 PMBTC every 4 days for the first era and halves every era after that
 
-//First 5 auctions(4 day periods) are reduced to allow fair entry(10,000 PMBTC). ~20 days.
-
 //Send MATIC directly to contract or use an interface to recieve your piece of that 25,000 PMBTC every 4 days.
 
 pragma solidity ^0.7.6;
