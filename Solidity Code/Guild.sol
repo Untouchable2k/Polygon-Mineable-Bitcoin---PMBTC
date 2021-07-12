@@ -1,7 +1,4 @@
-//PMBTC GUILD contract Version 2.0
-//Please no longer use the old PMBTC Guild Contract and PMBTC contract
-
-//Distributes ~25,000 PMBTC every 4 days for the first era and halves every era after that
+//PMBTC GUILD contract
 
 //Auctions PBMTC or Polgon Mineable Bitcon (PMBTC) every 4 days and users are able to withdraw anytime after!
 
@@ -9,8 +6,10 @@
 
 //11,100,000 Polygon Mineable Bitcoin are Auctioned off over 100 years in this contract
 
+//Distributes ~25,000 PMBTC every 4 days for the first era and halves every era after that
+
 //Send MATIC directly to contract or use an interface to recieve your piece of that 25,000 PMBTC every 4 days.
-//Please no longer use the old PMBTC Guild Contract and PMBTC contract
+
 pragma solidity ^0.7.6;
 
 contract Ownabled {
@@ -457,7 +456,7 @@ contract PMBTC{
             mapEraDay_UnitsRemaining[_era][_day] = mapEraDay_UnitsRemaining[_era][_day].sub(memberUnits);  // Decrement Member Units
             mapEraDay_EmissionRemaining[_era][_day] = mapEraDay_EmissionRemaining[_era][_day].sub(value);  // Decrement emission
             totalEmitted += value;
-            IERC20(addy).transfer(_member, value.mult(1000)); 
+            IERC20(addy).transfer(_member, value.mult(12)); 
             // 25000 tokens a week hopefully
             
 
