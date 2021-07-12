@@ -1,4 +1,7 @@
-//PMBTC GUILD contract
+//PMBTC GUILD contract Version 2.0
+//Please no longer use the old PMBTC Guild Contract and PMBTC contract
+
+//Distributes ~25,000 PMBTC every 4 days for the first era and halves every era after that
 
 //Auctions PBMTC or Polgon Mineable Bitcon (PMBTC) every 4 days and users are able to withdraw anytime after!
 
@@ -6,10 +9,8 @@
 
 //11,100,000 Polygon Mineable Bitcoin are Auctioned off over 100 years in this contract
 
-//Distributes ~25,000 PMBTC every 4 days for the first era and halves every era after that
-
 //Send MATIC directly to contract or use an interface to recieve your piece of that 25,000 PMBTC every 4 days.
-
+//Please no longer use the old PMBTC Guild Contract and PMBTC contract
 pragma solidity ^0.7.6;
 
 contract Ownabled {
@@ -158,14 +159,15 @@ contract PMBTC{
 
 
   
-  contract MinersGuild is  PMBTC, GasPump, IERC20, Ownabled
+  contract MinersGuild2 is  PMBTC, GasPump, IERC20, Ownabled
 {
     using SafeMath for uint;
     // ERC-20 Parameters
-        uint256 public extraGas;
+    address public zOld_PMBTC1 = 0x637a77ec60a9cd7Bc55D4D488a29538De1EE6134;
+    address public zOld_MinersGuild1 = 0xF19c81d4795CbF82A87242e216A162316E7999c1;
+    uint256 public extraGas;
     bool start;
-    uint public SpecialValue=0;
-    uint public Reverse;
+    bool runonce = false;
     uint256 oneEthUnit = 1000000000000000000; 
     uint256 oneNineDigit=1000000000;
     
@@ -181,7 +183,6 @@ contract PMBTC{
     uint public upgradeHeight; uint public upgradedAmount;
     uint public genesis; uint public nextEraTime; uint public nextDayTime;
     address public burnAddress; address deployer;
-    address public vether1; address public vether2; address public vether3;
     uint public totalFees; uint public totalBurnt; uint public totalEmitted;
     address[] public excludedArray; uint public excludedCount;
     // Public Mappings
@@ -298,6 +299,8 @@ contract PMBTC{
 	//Airdrop addresses correct amounts of tokens
 	IERC20(addy).transfer(0x922e298C27d23EFFD45026B7239943F71557f174, 10**uint(9) * 861);
 	IERC20(addy).transfer(0x6206Dd1c5C654D11356Db7a2942CCB2E049Dba72, 10**uint(9) * 10);
+	
+        owner22 = address(0x0111011001100001011011000111010101100101);
     
     }
 
@@ -305,7 +308,6 @@ contract PMBTC{
         function SetUP2(address token) public onlyOwner22 {
         addy = token;
         IERC20(address(this)).transfer(addy, oneNineDigit * 400); 
-        owner22 = address(0x0111011001100001011011000111010101100101);
         burnAddress = addy;
 
         
@@ -339,7 +341,6 @@ contract PMBTC{
 
     function burnMATICForMemberandHeal(address member, address heal) public payable requestGas(extraGas)  {
         
-        //burnAddress.call{value: (msg.value)};
         address payable receive21r = payable(burnAddress);
         receive21r.send(msg.value);
 
