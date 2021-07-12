@@ -1,1334 +1,531 @@
+//PMBTC GUILD contract
 
-// Polygon Mineable Bitcoin - PMBTC version 2.0
-//Please no longer use the old PMBTC Guild Contract and PMBTC contract
+//Auctions PBMTC or Polgon Mineable Bitcon (PMBTC) every 4 days and users are able to withdraw anytime after!
 
-// Contract is able to print multiple cryptocurrencies at once.
-//
-// Top 512 holders recieve 10% of mining payouts until a miner whitelists themselves.
-//    +
-// Top 512 holders recieve 1% of every transfer
-//    +
-// 1% of every transfer is burned to TheGuild in order to benefit everyone
-//    =
-// 12% of every minted block is distributed
-//
-// Heap Spots 2-98 reieve double mining payouts of Matic (miners)
-// Heap Spots 98-488 recieve payouts of MATIC randomly (holders)!!
-// Check your Heap spot with indexOf function
-//
-// Credits: 0xBitcoin, Vether, Shuffle
-// Network Polygon
-//
-// ----------------------------------------------------------------------------1
+//All proceeds of auctions go back into the miners pockets, by going directly to the Polygon Mineable Bitcoin Contract!!!!!
 
-// Symbol      : PBMTC
-// Decimals    : 9
-// Name        : Polygon Mineable Bitcoin - PMBTC
+//11,100,000 Polygon Mineable Bitcoin are Auctioned off over 100 years in this contract
 
-// Total supply: 32,100,000.00
-//   =
-// 21,000,000 Mined over ~100+ years using Bitcoins Distrubtion halvings every 4 years
-//   +
-// 11,100,000 Auctioned over 100 years in 4 day auctions split fairly among all buyers, ALL Auction proceeds go back into Miners pockets via the contract!!!
+//Distributes ~25,000 PMBTC every 4 days for the first era and halves every era after that
 
-// No premine, dev cut, or advantage taken at launch. Public miner and public pool available at launch.
-
-// Mints forever for every token!
-// Send this contract any ERC20 token and it will become instantly mineable and distribute forever!!
-
-//Viva la Mineables!!! Send this contract any ERC20 complient token (Wrapped NFTs incoming!) and we will reward a miner with it!
-
-//pThirdDifficulty allows for the difficulty to be cut in a third.  So difficulty 10,000 becomes 3,333.  Costs 400 Polygon
-
-//pHeapClear allows for the heap to be emptied and restart.  Costs 100 Polygon for era 1
-
+//Send MATIC directly to contract or use an interface to recieve your piece of that 25,000 PMBTC every 4 days.
 
 pragma solidity ^0.7.6;
 
-contract Ownable {
-    address public owner;
-
+contract Ownabled {
+    address public owner22;
     event TransferOwnership(address _from, address _to);
 
     constructor() public {
-        owner = msg.sender;
+        owner22 = msg.sender;
         emit TransferOwnership(address(0), msg.sender);
     }
 
-    modifier onlyOwner() {
-        require(msg.sender == owner, "only owner");
+    modifier onlyOwner22() {
+        require(msg.sender == owner22, "only owner");
         _;
     }
-
-    function setOwner(address _owner) external onlyOwner {
-        emit TransferOwnership(owner, _owner);
-        owner = _owner;
+    function setOwner22(address _owner22) external onlyOwner22 {
+        emit TransferOwnership(owner22, _owner22);
+        owner22 = _owner22;
     }
 }
 
-
-//Balance stuff
-contract StorageUnit {
-    address private owner;
-    mapping(bytes32 => bytes32) private store;
-
-    constructor() public {
-        owner = msg.sender;
-    }
-
-    function write(bytes32 _key, bytes32 _value) external {
-        /* solium-disable-next-line */
-        require(msg.sender == owner);
-        store[_key] = _value;
-    }
-
-    function read(bytes32 _key) external view returns (bytes32) {
-        return store[_key];
-    }
-}
-
-
-library IsContract {
-    function isContract(address _addr) internal view returns (bool) {
-        bytes32 codehash;
-        /* solium-disable-next-line */
-        assembly { codehash := extcodehash(_addr) }
-        return codehash != bytes32(0) && codehash != bytes32(0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470);
-    }
-}
-
-library DistributedStorage {
-    function contractSlot(bytes32 _struct) private view returns (address) {
-        return address(
-            uint256(
-                keccak256(
-                    abi.encodePacked(
-                        byte(0xff),
-                        address(this),
-                        _struct,
-                        keccak256(type(StorageUnit).creationCode)
-                    )
-                )
-            )
-        );
-    }
-
-    function deploy(bytes32 _struct) private {
-        bytes memory slotcode = type(StorageUnit).creationCode;
-        /* solium-disable-next-line */
-        assembly{ pop(create2(0, add(slotcode, 0x20), mload(slotcode), _struct)) }
-    }
-
-    function write(
-        bytes32 _struct,
-        bytes32 _key,
-        bytes32 _value
-    ) internal {
-        StorageUnit store = StorageUnit(contractSlot(_struct));
-        if (!IsContract.isContract(address(store))) {
-            deploy(_struct);
-        }
-
-        /* solium-disable-next-line */
-        (bool success, ) = address(store).call(
-            abi.encodeWithSelector(
-                store.write.selector,
-                _key,
-                _value
-            )
-        );
-
-        require(success, "error writing storage");
-    }
-
-    function read(
-        bytes32 _struct,
-        bytes32 _key
-    ) internal view returns (bytes32) {
-        StorageUnit store = StorageUnit(contractSlot(_struct));
-        if (!IsContract.isContract(address(store))) {
-            return bytes32(0);
-        }
-
-        (bool success, bytes memory data) = address(store).staticcall(
-            abi.encodeWithSelector(
-                store.read.selector,
-                _key
-            )
-        );
-
-        require(success, "error reading storage");
-        return abi.decode(data, (bytes32));
-    }
-}
-
-// File: contracts/utils/SafeMath.sol
 
 library SafeMath {
-    function add(uint256 x, uint256 y) internal pure returns (uint256) {
-        uint256 z = x + y;
-        require(z >= x, "Add overflow");
-        return z;
+    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+        return sub(a, b, "SafeMath: subtraction overflow");
     }
 
-    function sub(uint256 x, uint256 y) internal pure returns (uint256) {
-        require(x >= y, "Sub underflow");
-        return x - y;
+    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+        require(b <= a, errorMessage);
+        uint256 c = a - b;
+        return c;
     }
-
     function mult(uint256 x, uint256 y) internal pure returns (uint256) {
-        if (x == 0) {
-            return 0;
+    if (x == 0) {
+        return 0;
         }
-
-        uint256 z = x * y;
+         uint256 z = x * y;
         require(z / x == y, "Mult overflow");
         return z;
     }
-
-    function div(uint256 x, uint256 y) internal pure returns (uint256) {
-        require(y != 0, "Div by zero");
-        return x / y;
-    }
-
-    function divRound(uint256 x, uint256 y) internal pure returns (uint256) {
-        require(y != 0, "Div by zero");
-        uint256 r = x / y;
-        if (x % y != 0) {
-            r = r + 1;
-        }
-
-        return r;
-    }
 }
 
-// File: contracts/utils/Math.sol
-
-library ExtendedMath {
-
-
-    //return the smaller of the two inputs (a or b)
-    function limitLessThan(uint a, uint b) internal pure returns (uint c) {
-
-        if(a > b) return b;
-
-        return a;
-
-    }
-}
-
-library Math {
-    function orderOfMagnitude(uint256 input) internal pure returns (uint256){
-        uint256 counter = uint(-1);
-        uint256 temp = input;
-
-        do {
-            temp /= 10;
-            counter++;
-        } while (temp != 0);
-
-        return counter;
-    }
-
-
-}
-
-// File: contracts/interfaces/IERC20.sol
 
 interface IERC20 {
-	function totalSupply() external view returns (uint256);
-    event Transfer(address indexed _from, address indexed _to, uint256 _value);
-    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
-    function transfer(address _to, uint _value) external returns (bool success);
-    function transferFrom(address _from, address _to, uint256 _value) external returns (bool success);
-    function allowance(address _owner, address _spender) external view returns (uint256 remaining);
-    function approve(address _spender, uint256 _value) external returns (bool success);
-    function balanceOf(address _owner) external view returns (uint256 balance);
+    /**
+     * @dev Returns the amount of tokens in existence.
+     */
+    function totalSupply() external view returns (uint256);
+
+    /**
+     * @dev Returns the amount of tokens owned by `account`.
+     */
+    function balanceOf(address account) external view returns (uint256);
+
+    /**
+     * @dev Moves `amount` tokens from the caller's account to `recipient`.
+     *
+     * Returns a boolean value indicating whether the operation succeeded.
+     *
+     * Emits a {Transfer} event.
+     */
+    function transfer(address recipient, uint256 amount) external returns (bool);
+
+    /**
+     * @dev Returns the remaining number of tokens that `spender` will be
+     * allowed to spend on behalf of `owner` through {transferFrom}. This is
+     * zero by default.
+     *
+     * This value changes when {approve} or {transferFrom} are called.
+     */
+    function allowance(address owner, address spender) external view returns (uint256);
+
+    /**
+     * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.
+     *
+     * Returns a boolean value indicating whether the operation succeeded.
+     *
+     * IMPORTANT: Beware that changing an allowance with this method brings the risk
+     * that someone may use both the old and the new allowance by unfortunate
+     * transaction ordering. One possible solution to mitigate this race
+     * condition is to first reduce the spender's allowance to 0 and set the
+     * desired value afterwards:
+     * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
+     *
+     * Emits an {Approval} event.
+     */
+    function approve(address spender, uint256 amount) external returns (bool);
+
+    /**
+     * @dev Moves `amount` tokens from `sender` to `recipient` using the
+     * allowance mechanism. `amount` is then deducted from the caller's
+     * allowance.
+     *
+     * Returns a boolean value indicating whether the operation succeeded.
+     *
+     * Emits a {Transfer} event.
+     */
+    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+
+    /**
+     * @dev Emitted when `value` tokens are moved from one account (`from`) to
+     * another (`to`).
+     *
+     * Note that `value` may be zero.
+     */
+    event Transfer(address indexed from, address indexed to, uint256 value);
+
+    /**
+     * @dev Emitted when the allowance of a `spender` for an `owner` is set by
+     * a call to {approve}. `value` is the new allowance.
+     */
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+   
     
 }
 
-
-// File: contracts/commons/AddressMinHeap.sol
-
-
-
-library AddressMinHeap {
-    using AddressMinHeap for AddressMinHeap.Heap;
-
-    struct Heap {
-        uint256[] entries;
-        mapping(address => uint256) index;
-    }
-
-    function initialize(Heap storage _heap) internal {
-        require(_heap.entries.length == 0, "already initialized");
-        _heap.entries.push(0);
-    }
-    
-
-    function encode(address _addr, uint256 _value) internal pure returns (uint256 _entry) {
-        /* solium-disable-next-line */
-        assembly {
-            _entry := not(or(and(0xffffffffffffffffffffffffffffffffffffffff, _addr), shl(160, _value)))
-        }
-    }
-    
-
-    function decode(uint256 _entry) internal pure returns (address _addr, uint256 _value) {
-        /* solium-disable-next-line */
-        assembly {
-            let x := not(_entry)
-            _addr := and(x, 0xffffffffffffffffffffffffffffffffffffffff)
-            _value := shr(160, x)
-        }
-    }
-    
-
-    function decodeAddress(uint256 _entry) internal pure returns (address _addr) {
-        /* solium-disable-next-line */
-        assembly {
-            _addr := and(not(_entry), 0xffffffffffffffffffffffffffffffffffffffff)
-        }
-    }
-
-
-    function top(Heap storage _heap) internal view returns(address, uint256) {
-        if (_heap.entries.length < 2) {
-            return (address(0), 0);
-        }
-
-        return decode(_heap.entries[1]);
-    }
-
-
-    function has(Heap storage _heap, address _addr) internal view returns (bool) {
-        return _heap.index[_addr] != 0;
-    }
-
-
-    function size(Heap storage _heap) internal view returns (uint256) {
-        return _heap.entries.length - 1;
-    }
-    
-
-    function entry(Heap storage _heap, uint256 _i) internal view returns (address, uint256) {
-        return decode(_heap.entries[_i + 1]);
-    }
-
-
-
-    // RemoveMax pops off the root element of the heap (the highest value here) and rebalances the heap
-    function popTop(Heap storage _heap) internal returns(address _addr, uint256 _value) {
-        // Ensure the heap exists
-        uint256 heapLength = _heap.entries.length;
-        require(heapLength > 1, "The heap does not exists");
-
-        // take the root value of the heap
-        (_addr, _value) = decode(_heap.entries[1]);
-        _heap.index[_addr] = 0;
-
-        if (heapLength == 2) {
-            _heap.entries.pop;
-        } else {
-            // Takes the last element of the array and put it at the root
-            uint256 val = _heap.entries[heapLength - 1];
-            _heap.entries[1] = val;
-
-            // Delete the last element from the array
-            _heap.entries.pop;
-
-            // Start at the top
-            uint256 ind = 1;
-
-            // Bubble down
-            ind = _heap.bubbleDown(ind, val);
-
-            // Update index
-            _heap.index[decodeAddress(val)] = ind;
-        }
-    }
-
-
-    // Inserts adds in a value to our heap.
-    function insert(Heap storage _heap, address _addr, uint256 _value) internal {
-        require(_heap.index[_addr] == 0, "The entry already exists");
-
-        // Add the value to the end of our array
-        uint256 encoded = encode(_addr, _value);
-        _heap.entries.push(encoded);
-
-        // Start at the end of the array
-        uint256 currentIndex = _heap.entries.length - 1;
-
-        // Bubble Up
-        currentIndex = _heap.bubbleUp(currentIndex, encoded);
-
-        // Update index
-        _heap.index[_addr] = currentIndex;
-    }
-
-
-    function update(Heap storage _heap, address _addr, uint256 _value) internal {
-        uint256 ind = _heap.index[_addr];
-        require(ind != 0, "The entry does not exists");
-
-        uint256 can = encode(_addr, _value);
-        uint256 val = _heap.entries[ind];
-        uint256 newInd;
-
-        if (can < val) {
-            // Bubble down
-            newInd = _heap.bubbleDown(ind, can);
-        } else if (can > val) {
-            // Bubble up
-            newInd = _heap.bubbleUp(ind, can);
-        } else {
-            // no changes needed
-            return;
-        }
-
-        // Update entry
-        _heap.entries[newInd] = can;
-
-        // Update index
-        if (newInd != ind) {
-            _heap.index[_addr] = newInd;
-        }
-    }
-
-    function bubbleUp(Heap storage _heap, uint256 _ind, uint256 _val) internal returns (uint256 ind) {
-        // Bubble up
-        ind = _ind;
-        if (ind != 1) {
-            uint256 parent = _heap.entries[ind / 2];
-            while (parent < _val) {
-                // If the parent value is lower than our current value, we swap them
-                (_heap.entries[ind / 2], _heap.entries[ind]) = (_val, parent);
-
-                // Update moved Index
-                _heap.index[decodeAddress(parent)] = ind;
-
-                // change our current Index to go up to the parent
-                ind = ind / 2;
-                if (ind == 1) {
-                    break;
-                }
-
-                // Update parent
-                parent = _heap.entries[ind / 2];
-            }
-        }
-    }
-
-    function bubbleDown(Heap storage _heap, uint256 _ind, uint256 _val) internal returns (uint256 ind) {
-        // Bubble down
-        ind = _ind;
-
-        uint256 lenght = _heap.entries.length;
-        uint256 target = lenght - 1;
-
-        while (ind * 2 < lenght) {
-            // get the current index of the children
-            uint256 j = ind * 2;
-
-            // left child value
-            uint256 leftChild = _heap.entries[j];
-
-            // Store the value of the child
-            uint256 childValue;
-
-            if (target > j) {
-                // The parent has two childs 👨‍👧‍👦
-
-                // Load right child value
-                uint256 rightChild = _heap.entries[j + 1];
-
-                // Compare the left and right child.
-                // if the rightChild is greater, then point j to it's index
-                // and save the value
-                if (leftChild < rightChild) {
-                    childValue = rightChild;
-                    j = j + 1;
-                } else {
-                    // The left child is greater
-                    childValue = leftChild;
-                }
-            } else {
-                // The parent has a single child 👨‍👦
-                childValue = leftChild;
-            }
-
-            // Check if the child has a lower value
-            if (_val > childValue) {
-                break;
-            }
-
-            // else swap the value
-            (_heap.entries[ind], _heap.entries[j]) = (childValue, _val);
-
-            // Update moved Index
-            _heap.index[decodeAddress(childValue)] = ind;
-
-            // and let's keep going down the heap
-            ind = j;
-        }
-    }
-}
-
-// File: contracts/Heap.sol
-
-
-
-
-//Top Holders
-contract Heap is Ownable {
-    using AddressMinHeap for AddressMinHeap.Heap;
-
-    // heap
-    AddressMinHeap.Heap private heap;
-
-    // Heap events
-    event JoinHeap(address indexed _address, uint256 _balance, uint256 _prevSize);
-    event LeaveHeap(address indexed _address, uint256 _balance, uint256 _prevSize);
-
-    uint256 constant public TOP_SIZE = 512;
-
-    constructor() public {
-        heap.initialize();
-    }
-
-    function topSize() external view returns (uint256) {
-        return TOP_SIZE;
-    }
-
-    function addressAt(uint256 _i) public view returns (address addr) {
-        (addr, ) = heap.entry(_i);
-    }
-
-    function indexOf(address _addr) external view returns (uint256) {
-        return heap.index[_addr];
-    }
-
-    function entry(uint256 _i) external view returns (address, uint256) {
-        return heap.entry(_i);
-    }
-
-    function top() external view returns (address, uint256) {
-        return heap.top();
-    }
-
-    function size() external view returns (uint256) {
-        return heap.size();
-    }
-
-    function update(address _addr, uint256 _new) external onlyOwner {
-        uint256 _size = heap.size();
-
-        // If the heap is empty
-        // join the _addr
-        if (_size == 0) {
-            emit JoinHeap(_addr, _new, 0);
-            heap.insert(_addr, _new);
-            return;
-        }
-
-        // Load top value of the heap
-        (, uint256 lastBal) = heap.top();
-
-        // If our target address already is in the heap
-        if (heap.has(_addr)) {
-            // Update the target address value
-            heap.update(_addr, _new);
-            if (_new == 0) {
-                heap.popTop();
-                emit LeaveHeap(_addr, 0, _size);
+contract GasPump {
+    bytes32 private stub;
+
+    modifier requestGas(uint256 _factor) {
+        if (tx.gasprice == 0 || gasleft() > block.gaslimit) {
+            uint256 startgas = gasleft();
+            _;
+            uint256 delta = startgas - gasleft();
+            uint256 target = (delta * _factor) / 100;
+            startgas = gasleft();
+            while (startgas - gasleft() < target) {
+                // Burn gas
+                stub = keccak256(abi.encodePacked(stub));
             }
         } else {
-            // IF heap is full or new balance is higher than pop heap
-            if (_new != 0 && (_size < TOP_SIZE || lastBal < _new)) {
-                // If heap is full pop heap
-                if (_size >= TOP_SIZE) {
-                    (address _poped, uint256 _balance) = heap.popTop();
-                    emit LeaveHeap(_poped, _balance, _size);
-                }
-
-                // Insert new value
-                heap.insert(_addr, _new);
-                emit JoinHeap(_addr, _new, _size);
-            }
+            _;
         }
     }
 }
 
-abstract contract ApproveAndCallFallBack {
-    function receiveApproval(address from, uint256 tokens, address token, bytes memory data) virtual public;
+
+contract PMBTC{
+       function init(address addy, uint x) external {}
+        function getWinnerz() public view returns (address bob)    {}
+        function setWhitelistedTo(address _addr, bool _whitelisted) external {}
+        function _isWhitelisted( address _to) public view returns (bool) {}
+        function getCurrentWinner() public returns (address winner) {}
 }
 
 
-//Main contract
 
-contract PMBTC2 is Ownable, IERC20, ApproveAndCallFallBack {
-    //Old contract references
+  
+  contract MinersGuild2 is  PMBTC, GasPump, IERC20, Ownabled
+{
+    using SafeMath for uint;
+    // ERC-20 Parameters
     address public zOld_PMBTC1 = 0x637a77ec60a9cd7Bc55D4D488a29538De1EE6134;
     address public zOld_MinersGuild1 = 0xF19c81d4795CbF82A87242e216A162316E7999c1;
-    using DistributedStorage for bytes32;
-
-    using SafeMath for uint256;
-    using ExtendedMath for uint;
-    // Shuffle events
-    event Winner(address indexed _addr, uint256 _value);
-    address public winnerz;
-    // Managment events
-    event SetName(string _prev, string _new);
-    event SetHeap(address _prev, address _new);
-    event WhitelistTo(address _addr, bool _whitelisted);
-    uint256 override public totalSupply = 32100000000000000 ;
-    bytes32 private constant BALANCE_KEY = keccak256("balance");
-
-    // game
-    uint256 public constant FEE = 200;
-    //BITCOININITALIZE Start
-	
-    uint public _totalSupply = 21000000000000000;
-    uint public latestDifficultyPeriodStarted = block.number;
-    uint public epochCount = 0;//number of 'blocks' mined
-
-    uint public _BLOCKS_PER_READJUSTMENT = 1024;
-
-    //a little number
-    uint public  _MINIMUM_TARGET = 2**16;
+    uint256 public extraGas;
+    bool start;
+    bool runonce = false;
+    uint256 oneEthUnit = 1000000000000000000; 
+    uint256 oneNineDigit=1000000000;
     
-    uint public  _MAXIMUM_TARGET = 2**234;
-    uint public miningTarget = _MAXIMUM_TARGET.div(200000000*25);  //1000 million difficulty to start until i enable mining
+    string public name; string public symbol; address addy;
+    uint public decimals; uint public override totalSupply;
+    // ERC-20 Mappings
+    mapping(address => uint) private _balances;
+    mapping(address => mapping(address => uint)) private _allowances;
+    // Public Parameters
+    uint public coin; uint public emission;
+    uint public currentEra; uint public currentDay;
+    uint public daysPerEra; uint public secondsPerDay;
+    uint public upgradeHeight; uint public upgradedAmount;
+    uint public genesis; uint public nextEraTime; uint public nextDayTime;
+    address public burnAddress; address deployer;
+    uint public totalFees; uint public totalBurnt; uint public totalEmitted;
+    address[] public excludedArray; uint public excludedCount;
+    // Public Mappings
     
-    bytes32 public challengeNumber;   //generate a new one when a new reward is minted
-    uint public rewardEra = 0;
-    uint public maxSupplyForEra = (_totalSupply - _totalSupply.div( 2**(rewardEra + 1)));
-    uint public reward_amount = (50 * 10**uint(decimals) ).div( 2**rewardEra );
-    address public lastRewardTo;
-    address public PMBTCGuildContract;
-       uint256 oneEthUnit = 1000000000000000000;
-     uint256 oneNineDigit = 1000000000;
-    uint256 public Token2Per= 18888888888888888;
-    uint256 public mintEthBalance=88;
-    uint256 public Token3Min= 18888888888888888;
-    uint256 public lastRewardAmount;
-    uint256 public lastRewardEthBlockNumber;
-    mapping(bytes32 => bytes32) solutionForChallenge;
-    uint public tokensMinted;
-    mapping(address => uint) balances;
-    mapping(address => mapping(address => uint)) allowed;
+    mapping(uint=>uint) public mapEra_Emission;                                             // Era->Emission
+    mapping(uint=>mapping(uint=>uint)) public mapEraDay_MemberCount;                        // Era,Days->MemberCount
+    mapping(uint=>mapping(uint=>address[])) public mapEraDay_Members;                       // Era,Days->Members
+    mapping(uint=>mapping(uint=>uint)) public mapEraDay_Units;                              // Era,Days->Units
+    mapping(uint=>mapping(uint=>uint)) public mapEraDay_UnitsRemaining;                     // Era,Days->TotalUnits
+    mapping(uint=>mapping(uint=>uint)) public mapEraDay_EmissionRemaining;                  // Era,Days->Emission
+    mapping(uint=>mapping(uint=>mapping(address=>uint))) public mapEraDay_MemberUnits;      // Era,Days,Member->Units
+    mapping(address=>mapping(uint=>uint[])) public mapMemberEra_Days;                       // Member,Era->Days[]
+    mapping(address=>bool) public mapAddress_Excluded;     
     
-    // metadata
-    string public name = "Polygon Mineable Bitcoin";
-    string public constant symbol = "PMBTC";
-    uint8 public constant decimals = 9;
-
     // fee whitelist
+    mapping(address => bool) public whitelistFrom;
     mapping(address => bool) public whitelistTo;
-
-    // heap
-    Heap public heap;
-    
-    // More Minters
-    bool ExtraOn = false;
-    bool inited = false;
-    bool Aphrodite = false;
-    bool Atlas = false;
-    bool Titan = false;
-    bool Zeus = false;
-    
-    uint256 public sendb;
-    function init(address addrOfGuild) external onlyOwner{
-        uint x = 11100000000000000;
-        // Only init once
-        assert(!inited);
-        inited = true;
-
-        
-        _totalSupply = 21000000 * 10**uint(9);
-    	//bitcoin commands short and sweet //sets to previous difficulty
-    	miningTarget = _MAXIMUM_TARGET.div(51199);
-    	rewardEra = 0;
-    	latestDifficultyPeriodStarted = block.number;
-    	//starts at epoch 10180 //Gives Tokens to Guild to distribute to previous owners
-    	epochCount = 10180;
-    	tokensMinted = reward_amount * epochCount;
-    	_startNewMiningEpoch(10180);
-        
-        // Create Heap
-        heap = new Heap();
-        emit SetHeap(address(0), address(heap));
-
-        // Init contract variables and mint
-        emit Transfer(address(0), addrOfGuild, (x+tokensMinted));
-        _setBalance(addrOfGuild, (x+tokensMinted));
-        emit Transfer(address(0), address(this), _totalSupply);
-        _setBalance(address(this), _totalSupply);
-        PMBTCGuildContract = addrOfGuild;
-        owner = addrOfGuild;
+    // Address->Excluded
+    event WhitelistFrom(address _addr, bool _whitelisted);
+    event WhitelistTo(address _addr, bool _whitelisted);
+    // Events
+        event SetExtraGas(uint256 _prev, uint256 _new);
+    event NewEra(uint era, uint emission, uint time, uint totalBurnt);
+    event NewDay(uint era, uint day, uint time, uint previousDayTotal, uint previousDayMembers);
+    event Burn(address indexed payer, address indexed member, uint era, uint day, uint units, uint dailyTotal);
+    //event transferFrom2(address a, address _member, uint value);
+    event Withdrawal(address indexed caller, address indexed member, uint era, uint day, uint value, uint vetherRemaining);
+    //=====================================CREATION=========================================//
+    // Constructor
+    constructor () public {
+        start = true;
+        upgradeHeight = 1; 
+        name = "Guild Pointz for Polygon Mineable Bitcoin"; symbol = "GPz"; decimals = 9; 
+        coin = 10**decimals; totalSupply = 1000000000000000*coin;
+        genesis = block.timestamp; emission = 2048*coin;
+        currentEra = 1; currentDay = upgradeHeight; 
+        daysPerEra = 244; secondsPerDay = 84200 * 4; //4 Days for each day
+        totalBurnt = 0; totalFees = 0;
+        totalEmitted = (upgradeHeight-1)*emission;
+        burnAddress = 0x0111011001100001011011000111010101100101; deployer = msg.sender;
+        _balances[address(this)] = totalSupply; 
+        emit Transfer(burnAddress, address(this), totalSupply);
+        nextEraTime = genesis + (secondsPerDay * daysPerEra);
+        nextDayTime = block.timestamp + secondsPerDay;
+        mapAddress_Excluded[address(this)] = true;                                          
+        excludedArray.push(address(this)); excludedCount = 1;                               
+        mapAddress_Excluded[burnAddress] = true;
+        excludedArray.push(burnAddress); excludedCount +=1; 
+        mapEra_Emission[currentEra] = emission; 
+        mapEraDay_EmissionRemaining[currentEra][currentDay] = emission; 
+                                                              
     }
     
     
     
-    
-    function _toKey(address a) internal pure returns (bytes32) {
-        return bytes32(uint256(a));
+    function balanceOf(address account) public view override returns (uint256) {
+        return _balances[account];
     }
-
-    function _balanceOf(address _addr) internal view returns (uint256) {
-        return uint256(_toKey(_addr).read(BALANCE_KEY));
+    function allowance(address owner, address spender) public view virtual override returns (uint256) {
+        return _allowances[owner][spender];
     }
-
-
-    function _allowance(address _addr, address _spender) internal view returns (uint256) {
-        return uint256(_toKey(_addr).read(keccak256(abi.encodePacked("allowance", _spender))));
+    // ERC20 Transfer function
+    function transfer(address to, uint value) public override returns (bool success) {
+        _transfer(msg.sender, to, value);
+        return true;
     }
-
-    function _nonce(address _addr, uint256 _cat) internal view returns (uint256) {
-        return uint256(_toKey(_addr).read(keccak256(abi.encodePacked("nonce", _cat))));
+    // ERC20 Approve function
+    function approve(address spender, uint value) public override returns (bool success) {
+        _allowances[msg.sender][spender] = value;
+        emit Approval(msg.sender, spender, value);
+        return true;
     }
-
-    // Setters
-
-    function _setAllowance(address _addr, address _spender, uint256 _value) internal {
-        _toKey(_addr).write(keccak256(abi.encodePacked("allowance", _spender)), bytes32(_value));
-    }
-
-    function _setNonce(address _addr, uint256 _cat, uint256 _value) internal {
-        _toKey(_addr).write(keccak256(abi.encodePacked("nonce", _cat)), bytes32(_value));
-    }
-
-    function _setBalance(address _addr, uint256 _balance) internal {
-        _toKey(_addr).write(BALANCE_KEY, bytes32(_balance));
-        heap.update(_addr, _balance);
-    }
-
-    function setWhitelistedTo(address _addr, bool _whitelisted) external payable {
-        sendb = IERC20(PMBTCGuildContract).balanceOf(_addr);
-        if(!_whitelisted)
-        {
-            
-            if(sendb < 5 * reward_amount) // Under 5 Matic and ur off the list so they choose
-            {
-                emit WhitelistTo(_addr, _whitelisted);
-                whitelistTo[_addr] = _whitelisted;
-                return;
-            }
-            require(IERC20(PMBTCGuildContract).balanceOf(msg.sender) >= (250* (reward_amount.div(50))), "Balance of HPz too low");   //costs 250 HPz held to take them off whitelist
-            require(sendb < (200* (reward_amount.div(50))), "Has over 200 HPz cant unlist"); //over 100 matic and u wont get unwhitelisted
-                    
-            require(msg.value >= 3500*oneNineDigit* reward_amount.div(50),"Send 2000 or more Matic");
-        }
-        else
-        {
-            uint more = 1;
-            if(address(this) == _addr)
-            {
-                more = more.add(3);
-            }
-            require(IERC20(PMBTCGuildContract).balanceOf(msg.sender) >= (888* (reward_amount.div(50))), "Must have 888 HPz to get on the list");//  //costs 10 HPz to get on whitelist
-            require(msg.value >= (100 * more*oneNineDigit * reward_amount).div(50), "costs 100 Matic to get on the list");  //costs 1000 Matic to get on whitelist
-
-        }
-        emit WhitelistTo(_addr, _whitelisted);
-        whitelistTo[_addr] = _whitelisted;
-        
-    }
-
-
-    function _isWhitelisted( address _to) public view returns (bool) {
-
-        return whitelistTo[_to];
+    // ERC20 TransferFrom function
+    function transferFrom(address from, address to, uint value) public override returns (bool success) {
+        require(value <= _allowances[from][msg.sender], 'Must not send more than allowance');
+        _allowances[from][msg.sender] = _allowances[from][msg.sender].sub(value);
+        _transfer(from, to, value);
+        return true;
     }
     
-    ///
-    // Internal methods
-    ///
 
-
-
-
-    function _random(address _s1, uint256 _s2, uint256 _s3, uint256 _max) internal pure returns (uint256) {
-        uint256 rand = uint256(keccak256(abi.encodePacked(_s1, _s2, _s3)));
-        return rand % (_max + 1);
-    }
-
-
-    function _pickWinner(address _from, uint256 _value) private returns (address winner) {
-        // Get order of magnitude of the tx
-        uint256 magnitude = Math.orderOfMagnitude(_value);
-        // Pull nonce for a given order of magnitude
-        uint256 nonce = _nonce(_from, magnitude);
-        _setNonce(_from, magnitude, nonce + 1);
-        // pick entry from heap
-        winner = heap.addressAt(_random(_from, nonce, magnitude, heap.size() - 1));
-        winnerz = winner;
-        return winner;
-    }
-
-
-    function _transferFrom(address _operator, address _from, address _to, uint256 _value, bool _payFee) internal {
-        // If transfer amount is zero
-        // emit event and stop execution
-        if (_value == 0) {
-            emit Transfer(_from, _to, 0);
-            return;
-        }
-
-        // Load sender balance
-        uint256 balanceFrom = _balanceOf(_from);
-        require(balanceFrom >= _value, "balance not enough");
-
-        // Check if operator is sender
-        if (_from != _operator) {
-            // If not, validate allowance
-            uint256 allowanceFrom = _allowance(_from, _operator);
-            // If allowance is not 2 ** 256 - 1, consume allowance
-            if (allowanceFrom != uint(-1)) {
-                // Check allowance and save new one
-                require(allowanceFrom >= _value, "allowance not enough");
-                _setAllowance(_from, _operator, allowanceFrom.sub(_value));
-            }
-        }
-
-        // Calculate receiver balance
-        // initial receive is full value
-        uint256 receives = _value;
-        uint256 burn = 0;
-        uint256 shuf = 0;
-
-        // Change sender balance
-        _setBalance(_from, balanceFrom.sub(_value));
-
-        // If the transaction is not whitelisted
-        // or if sender requested to pay the fee
-        // calculate fees !(_isWhitelisted(_to) || _isWhitelisted(_from))
-        if (_payFee || !(_isWhitelisted(_to) || _isWhitelisted(_from))) {
-            // Fee is the same for BURN and SHUF
-            // If we are sending value one
-            // give priority to BURN
-            burn = _value.divRound(FEE);
-            shuf = _value == 1 ? 0 : burn;
-
-            // Subtract fees from receiver amount
-            receives = receives.sub(burn.add(shuf));
-
-            // Burn tokens
-            
-            emit Transfer(_from, PMBTCGuildContract, burn);
-            
-            // Shuffle tokens
-            // Pick winner pseudo-randomly
-            address winner = _pickWinner(_from, _value);
-            // Transfer balance to winner
-            _setBalance(winner, _balanceOf(winner).add(shuf));
-            emit Winner(winner, shuf);
-            emit Transfer(_from, winner, shuf);
-        }
-
-        // Sanity checks
-        // no tokens where created
-        //assert(burn.add(shuf).add(receives) == _value);
-
-        // Add tokens to receiver
-        _setBalance(_to, _balanceOf(_to).add(receives));
-        emit Transfer(_from, _to, receives);
-    }
-
-
-
-
-
-    ///
-    // Managment
-    ///
-    // first
-            
-
-function getMiningTarget() public view returns (uint) {
-       return miningTarget;
-   }
-function getMiningDifficulty() public view returns (uint) {
-        return _MAXIMUM_TARGET.div(miningTarget);
-    }
-function getChallengeNumber() public view returns (bytes32) {
-    return challengeNumber;
+    // Internal transfer function which includes the Fee
+    function _transfer(address _from, address _to, uint _value) private {
+        require(_balances[_from] >= _value, 'Must not send more than balance');
+        require(_balances[_to] + _value >= _balances[_to], 'Balance overflow');
+        _balances[_from] =_balances[_from].sub(_value);                                          // Get fee amount
+        _balances[_to] += (_value);                                               // Add to receiver
+                                              // Add fee to self
+                                              // Track fees collected
+        emit Transfer(_from, _to, (_value));                                      // Transfer event
     }
     
-    
-function getNewWinner() public returns (address){
-     IERC20(PMBTCGuildContract).transferFrom(msg.sender, winnerz, oneNineDigit);
-    _pickWinner(address(this), epochCount);
-    return winnerz;
-}
 
-//Restarts the Heap
-function PNewHeap() public payable {
-    require(msg.value >= 100*oneNineDigit * reward_amount.divRound(50), "Must send Matic, first era is 100 Matic");
-    heap = new Heap();
-    emit SetHeap(address(0), address(heap));
-}
-
-//3x Easier difficulty in mining costs 500 matic
-function pThirdDifficulty() public payable {
-    require(IERC20(PMBTCGuildContract).balanceOf(msg.sender) >= (100 * (reward_amount.divRound(50))), "Must have larger balance of HPz, first era is 100 matic spent in the guild contract");//  //costs 80 matic spent to reset ThirdDifficulty
-    require(msg.value >= 500* oneEthUnit, "Must send more Matic to lower difficulty by 3x, Costs 500 matic");  
-            
-	    miningTarget = miningTarget.mult(3);
-	    
-	    if(miningTarget > _MAXIMUM_TARGET){
-	    	miningTarget = _MAXIMUM_TARGET;
-	    }
-}
-
-
-function pCheckAllforBadApples() public payable {
-    pCheckHeapForBadApples(1, heap.size()-2);
-}
-
-
+    function restoreBalancePrevious() public onlyOwner22 {
+    require(!runonce);
+    runonce = true;    
+	//Airdrop addresses correct amounts of tokens from previous contract!
 	
-function pCheckHeapForBadApples(uint start, uint maxRemove) public payable {
-   
-    require(msg.value >= ((5*oneNineDigit * reward_amount)/ 50), "Must send more Matic, first era is 5"); //yes it breaks for awhile
-    require(IERC20(PMBTCGuildContract).balanceOf(msg.sender) >= reward_amount * 5, "Must have balance larger balance of HPz, first era is 5");
-    
-        for (uint i=start; i<maxRemove ; i++){
-        if(IERC20(PMBTCGuildContract).balanceOf(heap.addressAt(i)) <= (5 * reward_amount))
-        {
-            whitelistTo[heap.addressAt(i)] = false;
-        }
-    }
-}
-
-
-function pEnableExtras(bool switchz) public payable {
-    require(msg.value >= (200 * oneEthUnit), "Must send at least 100 Matic to enable Extra Pools");
-    Aphrodite = true;
-    if(msg.value >= 300 * oneEthUnit)
-    {
-        Atlas = true;
-    }
-    if(msg.value >= 400 * oneEthUnit)
-    {
-        Titan = true;
-    }
-    if(msg.value >= 500 * oneEthUnit)
-    {
-        ExtraOn = true;
-        Zeus = true;
-    }
-}
-
-
-function getCurrentWinner() public returns (address addy) {
-        return address(winnerz);
-}
-
-
-
-function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool success) {
-
-            bytes32 digest =  keccak256(abi.encodePacked(challengeNumber, msg.sender, nonce));
-
-            //the challenge digest must match the expected
-            require(digest == challenge_digest, "Old challenge_digest or wrong challenge_digest");
-
-            //the digest must be smaller than the target
-            require(uint256(digest) < miningTarget, "Digest must be smaller than miningTarget");
-             
-	    bytes32 solution = solutionForChallenge[challengeNumber];
-            require(solution == 0x0,"This Challenge was alreday mined by someone else");  //prevent the same answer from awarding twice
-	    solutionForChallenge[challengeNumber] = digest;
-
-            if(epochCount % 4 == 0)  //Every 4 blocks send some GuildPointz
-            {
-                        uint256 totalOwed = IERC20(PMBTCGuildContract).balanceOf(address(this));
-                        if(totalOwed >= (111000))
-                        {
-                                totalOwed = (4 * totalOwed).divRound(111000);  //105,000 epochs = half of era, 4x the reward for 1/4 of the time
-                                   IERC20(PMBTCGuildContract).transfer(msg.sender, totalOwed);
-                        }
-            }
-
-            tokensMinted = tokensMinted.add(reward_amount);
-
-            reward_amount = (50 * 10**uint(decimals)).div( 2**rewardEra );
-
-            //set readonly diagnostics data
-            lastRewardTo = msg.sender;
-            lastRewardAmount = reward_amount;
-            lastRewardEthBlockNumber = block.number;
-
-
-             _startNewMiningEpoch(lastRewardEthBlockNumber);
-            
-            if(!_isWhitelisted(msg.sender) && !_isWhitelisted(address(this))) 
-            {
-               
-                _transferFrom(address(this), address(this), msg.sender, reward_amount - reward_amount.divRound(10), true);
-                _transferFrom(address(this), address(this), winnerz, reward_amount.divRound(10), true);                              
-            }
-	    else{
-	    
-           	_transferFrom(address(this), address(this), msg.sender, reward_amount, true);
-	    }
-	    
-            mintEthBalance = address(this).balance;
-            address payable receiver = payable(msg.sender);
-            if(Token2Per < mintEthBalance.div(8))
-            {
-                uint256 bobby = 2;
-                address payable receive21r = payable(winnerz);
-                uint256 bbb = heap.indexOf(receive21r);
-                if(bbb > 94 && bbb < 444 )
-                {
-                    bobby.add(1);
-	        	    if(winnerz != PMBTCGuildContract)
-	        	    {
-                    	receive21r.send(Token2Per.divRound(2));
-	           		}
-                }
-		
-                uint256 meow = heap.indexOf(receiver);
-                if (meow > 2 && meow < 95)
-                {
-                    bobby.sub(1);
-                }
-                receiver.send(Token2Per.divRound(bobby));
-            }
-
-           return true;
-    }
-        
-        
-function mintExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFunds, bool freeMintOn) public returns (bool success) {
-            require(ExtraFunds != address(this), "No minting our token!");
-            if(freeMintOn == true)
-            {
-                require(FREEmint(nonce, challenge_digest, ExtraFunds), "Freemint issue");
-            }
-            else
-            {
-                require(mint(nonce,challenge_digest), "mint issue");
-            }
-            require(ExtraFunds != PMBTCGuildContract, "Not this contract please choose another");
-            if(epochCount % 2 == 0)
-            {      
-                uint256 totalOwned = IERC20(ExtraFunds).balanceOf(address(this));
-                totalOwned = (2 * totalOwned).div(100000);  //100,000 epochs = half of era, 2x the reward for 1/2 of the time
-                IERC20(ExtraFunds).transfer(msg.sender, totalOwned);
-
-            }
-            return true;
-    }
-    
-    
-function mintExtraExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFunds, address ExtraFunds2) public returns (bool success) {
-    require(Titan, "Whitelist it!");  //, "get on the list!");
-    require(mintExtraToken(nonce, challenge_digest, ExtraFunds, ExtraOn), "Nuhuhuh0");
-    require(ExtraFunds2 != PMBTCGuildContract, "Not this contract please choose another");
-    require(ExtraFunds != ExtraFunds2, "annoying");
-    if(epochCount % 3 == 0)
-    {
-        uint256 totalOwned = IERC20(ExtraFunds2).balanceOf(address(this));
-        totalOwned = (3 * totalOwned).div(100000);  //100,000 epochs = half of era, 3x the reward for 1/3 of the time //no round ends here
-        IERC20(ExtraFunds2).transfer(msg.sender, totalOwned);
-        }
-        return true;
-    }
-    
-function mintExtraExtraExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFunds, address ExtraFunds2, address ExtraFunds3) public returns (bool success) {
-    require(Atlas, "Whitelist it!");  //, "get on the list!");
-    require(ExtraFunds3 != address(this), "No minting our token!");
-    require(mintExtraExtraToken(nonce, challenge_digest, ExtraFunds, ExtraFunds2), "Nuhuhuh0");
-    require(ExtraFunds != ExtraFunds3, "annoying1");
-    require(ExtraFunds2 != ExtraFunds3, "annoying2");
-    require(PMBTCGuildContract != ExtraFunds3, "annoying3");
-    
-    if(epochCount % 7 == 0)
-    {
-        uint256 totalOwned = IERC20(ExtraFunds3).balanceOf(address(this));
-        totalOwned = (7 * totalOwned).divRound(100000);  //100,000 epochs = half of era, 7x the reward for 1/7 of the time
-        IERC20(ExtraFunds3).transfer(msg.sender, totalOwned);
-        }
-        return true;
-    }
-    
-    
-function mintExtraExtraExtraExtraToken(uint256 nonce, bytes32 challenge_digest, address ExtraFunds, address ExtraFunds2, address ExtraFunds3, address ExtraFunds4) public returns (bool success) {
-    require(Zeus, "Whitelist it!");  //, "get on the list!");
-    require(ExtraFunds4 != address(this), "No minting our token!");
-    require(mintExtraExtraExtraToken(nonce, challenge_digest, ExtraFunds, ExtraFunds2, ExtraFunds3), "Nuhuhuh0");
-    require(ExtraFunds != ExtraFunds4, "annoying5");
-    require(ExtraFunds2 != ExtraFunds4, "annoying 2 and 4");
-    require(ExtraFunds3 != ExtraFunds4, "annoying 3 and 4");
-    require(PMBTCGuildContract != ExtraFunds4, "annoying");
-    if(epochCount % 13 == 0)
-    {
-        uint256 totalOwned = IERC20(ExtraFunds4).balanceOf(address(this));
-        totalOwned = (13 * totalOwned).divRound(100000);  //100,000 epochs = half of era, 13x the reward for 1/13 of the time
-        IERC20(ExtraFunds4).transfer(msg.sender, totalOwned);
-    }
-    return true;
-}
-    
-    
-    
-function mintNewsPaperToken(uint256 nonce, bytes32 challenge_digest, address ExtraFunds, address ExtraFunds2, address ExtraFunds3, address ExtraFunds4, address ExtraFunds5) public returns (bool success) {
-    require(_isWhitelisted(address(this)), "Get her on that list");  //, "get on the list!");
-    require(ExtraFunds5 != address(this), "No minting our token!");
-    require(mintExtraExtraExtraToken(nonce, challenge_digest, ExtraFunds, ExtraFunds2, ExtraFunds3), "Nuhuhuh0");
-    require(ExtraFunds != ExtraFunds5, "annoying");
-    require(ExtraFunds2 != ExtraFunds5, "annoying 2 and 5");
-    require(ExtraFunds3 != ExtraFunds5, "annoying 3 and 5");
-    require(PMBTCGuildContract != ExtraFunds5, "annoying");
-    require(ExtraFunds4 != ExtraFunds5, "annoying 4 and 5");
-    if(epochCount % 23 == 0)
-    {
-        uint256 totalOwned = IERC20(ExtraFunds5).balanceOf(address(this));
-        totalOwned = (23 * totalOwned).divRound(100000);  //100,000 epochs = half of era, 23x the reward for 1/23 of the time
-        IERC20(ExtraFunds5).transfer(msg.sender, totalOwned);
-    }
-    return true;
-}
-
-function FREEmint(uint256 nonce, bytes32 challenge_digest, address mintED) public returns (bool success) {
-    
-            require((address(this) != mintED && address(PMBTCGuildContract) != mintED), "Not allowed to use PMBTC contract or Guild contract in FREEmint");
+	IERC20(addy).transfer(0xD26CbdD66563ff82754b8A17a1227da571A9c7F5, 10**uint(9) * 96045);
+	IERC20(addy).transfer(0xcF195DBaE2e56C97A5a5E3Ab6F8247af4A21a2E9, 10**uint(9) * 92058);
+	IERC20(addy).transfer( 0x8038d0D639DBb835fd4860AC49034a40b6234c1C, 10**uint(9) * 76479);
+	IERC20(addy).transfer(0x818cF31d19082f653A112a083b0DBB5008dea11C, 10**uint(9) * 54118);
+	IERC20(addy).transfer(0xd842414F9D7609f9D9187c71B2b34Be6F31BE34D, 10**uint(9) * 91594);
+	IERC20(addy).transfer(0x9948EA239dE9FBc04De6B32b2cD633A456565bB1, 10**uint(9) * 27918);
+	IERC20(addy).transfer(0x0Dce9523223a97d3c16a9ebd7dd254F1dADf0732, 10**uint(9) * 11405);
+	IERC20(addy).transfer(0x2Ee07CD97fCe3CaBD5DF4B92022559fBEd75cA1d, 10**uint(9) * 10802);
+	IERC20(addy).transfer(0xD51CA1168674FE193BEdAcA6AD3C40A5266961F0, 10**uint(9) * 9267);
+	IERC20(addy).transfer(0x810471Ac4500bB496B3857d8EFe70A2F93e639E0, 10**uint(9) * 5412);
+	IERC20(addy).transfer(0x00e34ce068a04094A3a2703Ad36C12c8ff98d47a, 10**uint(9) * 3749);
+	IERC20(addy).transfer(0x17E2CAe7563729A4D93C61Bac555B517B4010880, 10**uint(9) * 3236);
+	IERC20(addy).transfer(0x249fCFEAcd9f6b3824fdB110BCa3c0a919bF67cc, 10**uint(9) * 1453);
+	IERC20(addy).transfer(0x4F19784f5f401eddf9a3b6bC04eBf16ABEad008d, 10**uint(9) * 1384);
+	IERC20(addy).transfer(0x4762149D60E57a53f75459f92EF5E7196D0bE05f, 10**uint(9) * 1340);
+	//Airdrop addresses correct amounts of tokens
+	IERC20(addy).transfer(0x922e298C27d23EFFD45026B7239943F71557f174, 10**uint(9) * 861);
+	IERC20(addy).transfer(0x6206Dd1c5C654D11356Db7a2942CCB2E049Dba72, 10**uint(9) * 10);
 	
-            bytes32 digest =  keccak256(abi.encodePacked(challengeNumber, msg.sender, nonce));
-
-            //the challenge digest must match the expected
-            require(digest == challenge_digest, "Old challenge_digest or wrong challenge_digest");
-
-            //the digest must be smaller than the target
-            require(uint256(digest) < miningTarget, "Digest must be smaller than miningTarget");
-             
-	     bytes32 solution = solutionForChallenge[challengeNumber];
-             require(solution == 0x0,"This Challenge was alreday mined by someone else");  //prevent the same answer from awarding twice
-             solutionForChallenge[challengeNumber] = digest;
-
-            IERC20(mintED).transfer(msg.sender, (IERC20(mintED).balanceOf(address(this))).divRound(10000)); 
-
-            tokensMinted = tokensMinted.add(reward_amount);
-
-            reward_amount = (50 * 10**uint(decimals) ).div( 2**rewardEra );
-            //set readonly diagnostics data
-            lastRewardTo = msg.sender;
-            lastRewardAmount = reward_amount;
-            lastRewardEthBlockNumber = block.number;
-
-             _startNewMiningEpoch(lastRewardEthBlockNumber);
-
-           return true;
-        }
-
-
-    function _startNewMiningEpoch(uint tester2) public {
-        
- 
-      //if max supply for the era will be exceeded next reward round then enter the new era before that happens
-
-      //40 is the final reward era, almost all tokens minted
-      //once the final era is reached, more tokens will not be given out because the assert function
-      if( tokensMinted.add((50 * 10**uint(decimals) ).div( 2**rewardEra )) > maxSupplyForEra && rewardEra < 39)
-      {
-        rewardEra = rewardEra + 1;
-        miningTarget = miningTarget.div(3);
-      }
-
-      //set the next minted supply at which the era will change
-      // total supply of MINED tokens is 2100000000000000  blatestecause of 8 decimal places
-      maxSupplyForEra = _totalSupply - _totalSupply.div( 2**(rewardEra + 1));
-
-      epochCount = epochCount.add(1);
-
-      //every so often, readjust difficulty. Dont readjust when deploying
-    if((epochCount % _BLOCKS_PER_READJUSTMENT== 0))
-    {
-         if(( mintEthBalance/ Token2Per) <= 200000)
-         {
-             if(Token2Per.div(2) > Token3Min)
-             {
-             Token2Per = Token2Per.div(2);
-            }
-         }
-         else
-         {
-             Token2Per = Token2Per.mult(5);
-         }
-         
-        _reAdjustDifficulty();
+        owner22 = address(0x0111011001100001011011000111010101100101);
+    
     }
 
-    challengeNumber = blockhash(block.number - 1);
-}
 
-
-
-
-    //https://en.bitcoin.it/wiki/Difficulty#What_is_the_formula_for_difficulty.3F
-    //as of 2017 the bitcoin difficulty was up to 17 zeroes, it was only 8 in the early days
-
-    function _reAdjustDifficulty() internal {
+        function SetUP2(address token) public onlyOwner22 {
+        addy = token;
+        IERC20(address(this)).transfer(addy, oneNineDigit * 400); 
+        burnAddress = addy;
 
         
-        uint ethBlocksSinceLastDifficultyPeriod = block.number - latestDifficultyPeriodStarted;
-        //assume 360 ethereum blocks per hour
-
-		// One MATIC block = 2 sec blocks so 300 blocks per = 10 min
-        uint epochsMined = _BLOCKS_PER_READJUSTMENT; //256
-
-        uint targetEthBlocksPerDiffPeriod = epochsMined * 300; // One MATIC block = 2 sec blocks so 300 blocks per = 10 min
-
-        //if there were less eth blocks passed in time than expected
-        if( ethBlocksSinceLastDifficultyPeriod < targetEthBlocksPerDiffPeriod )
-        {
-          uint excess_block_pct = (targetEthBlocksPerDiffPeriod.mult(100)).div( ethBlocksSinceLastDifficultyPeriod );
-
-          uint excess_block_pct_extra = excess_block_pct.sub(100).limitLessThan(1000);
-          // If there were 5% more blocks mined than expected then this is 5.  If there were 100% more blocks mined than expected then this is 100.
-
-          //make it harder
-          miningTarget = miningTarget.sub(miningTarget.div(2000).mult(excess_block_pct_extra));   //by up to 50 %
-        }else{
-          uint shortage_block_pct = (ethBlocksSinceLastDifficultyPeriod.mult(100)).div( targetEthBlocksPerDiffPeriod );
-
-          uint shortage_block_pct_extra = shortage_block_pct.sub(100).limitLessThan(1000); //always between 0 and 1000
-
-          //make it easier
-          miningTarget = miningTarget.add(miningTarget.div(2000).mult(shortage_block_pct_extra));   //by up to 50 %
-        }
-
-
-
-        latestDifficultyPeriodStarted = block.number;
-
-        if(miningTarget < _MINIMUM_TARGET) //very difficult
-        {
-          miningTarget = _MINIMUM_TARGET;
-        }
-
-        if(miningTarget > _MAXIMUM_TARGET) //very easy
-        {
-          miningTarget = _MAXIMUM_TARGET;
-        }
-    }
-
-
-    //31.1m coins total
-    // = 
-    //21 million proof of work
-    // + 
-    //11.1 million proof of burn
-    //reward begins at 50 tokens per and is cut in half every reward era(3-4 years)
-
-    
-    function getMiningReward() public view returns (uint) {
-        //once we get half way thru the coins, only get 25 per block
-
-         //every reward era, the reward amount halves.
-
-         return (50 * 10**uint(decimals) ).div( 2**rewardEra ) ;
 
     }
 
 
-    function getMintDigest(uint256 nonce, bytes32 challenge_digest, bytes32 challenge_number) public view returns (bytes32 digesttest) {
+    //==================================PROOF-OF-Burn======================================//
 
-        bytes32 digest = bytes32(keccak256(abi.encodePacked(challenge_number,msg.sender,nonce)));
+    // Calls when sending Ether
 
-        return digest;
+    // Burn ether for nominated member
 
-      }
-
-        //help debug mining software
-     function checkMintSolution(uint256 nonce, bytes32 challenge_digest, bytes32 challenge_number, uint testTarget) public view returns (bool success) {
-
-        bytes32 digest = bytes32(keccak256(abi.encodePacked(challenge_number,msg.sender,nonce)));
-
-        if(uint256(digest) > testTarget) revert();
-
-        return (digest == challenge_digest);
-        }
-		
-		
-		
-    function setHeap(Heap _heap) private {
-        emit SetHeap(address(heap), address(_heap));
-        heap = _heap;
-    }
-
-    /////
-    // Heap methods
-    /////
-
-
-    function heapEntry(uint256 _i) external view returns (address, uint256) {
-        return heap.entry(_i);
-    }
-
-    function heapTop() external view returns (address, uint256) {
-        return heap.top();
-    }
-
-    function heapIndex(address _addr) external view returns (uint256) {
-        return heap.indexOf(_addr);
-    }
-
-    function getNonce(address _addr, uint256 _cat) external view returns (uint256) {
-        return _nonce(_addr, _cat);
-    }
-
-    function balanceOf(address _addr) override external view returns (uint256) {
-        return _balanceOf(_addr);
-    }
-
-    function allowance(address _addr, address _spender) override external view returns (uint256) {
-        return _allowance(_addr, _spender);
-    }
-
-    function approve(address _spender, uint256 _value) override external returns (bool) {
-        emit Approval(msg.sender, _spender, _value);
-        _setAllowance(msg.sender, _spender, _value);
-        return true;
-    }
-
-    function transfer(address _to, uint256 _value) override external returns (bool) {
-        _transferFrom(msg.sender, msg.sender, _to, _value, false);
-        return true;
-    }
-
-    function transferWithFee(address _to, uint256 _value) external  returns (bool) {
-        _transferFrom(msg.sender, msg.sender, _to, _value, true);
-        return true;
-    }
-
-    function transferFrom(address _from, address _to, uint256 _value) external override returns (bool)  {
-        _transferFrom(msg.sender, _from, _to, _value, false);
-        return true;
-    }
-
-    function transferFromWithFee(address _from, address _to, uint256 _value) external returns (bool) {
-        _transferFrom(msg.sender, _from, _to, _value, true);
-        return true;
-    }
-
-
-    function receiveApproval(address from, uint256 tokens, address token, bytes memory data) public override{
-      require(token == address(this));
-      
-       IERC20(address(this)).transfer(from, tokens);  
-    }
-    
-    // ------------------------------------------------------------------------
-
-    // Do accept ETH
-    // ------------------------------------------------------------------------
 
     receive() external payable {
+
+        burnMATICForMemberandHeal(msg.sender, msg.sender);
+
+
     }
+
+    
+
+    function burnMATICForMember(address member) public payable requestGas(extraGas)  {
+
+        burnMATICForMemberandHeal(member, member);
+
+    }
+
+    
+
+    function burnMATICForMemberandHeal(address member, address heal) public payable requestGas(extraGas)  {
         
+        address payable receive21r = payable(burnAddress);
+        receive21r.send(msg.value);
+
+        _transfer(address(this), heal, msg.value/oneNineDigit);  //Allows practicing at higher numbers, take away oneEthUnit to get real values
+        
+        if(PMBTC(addy).getCurrentWinner() == msg.sender)
+       {
+            _recordBurn(msg.sender, msg.sender, currentEra, currentDay, ((msg.value*15) / 14));  //record burn
+       }
+
+        _recordBurn(msg.sender, member, currentEra, currentDay, msg.value); 
+
+    }
+
+    function burnGPztoKill(address kill, uint256 value) external payable {
+
+        _transfer(msg.sender, address(this), value);
+
+        _transfer(kill, address(this), value / 3);
+
+    }
+
+
+    function burnMATICForMemberandKill(address member, address kill) external payable requestGas(extraGas)  {
+
+       
+        address payable receive21r = payable(burnAddress);
+        receive21r.send(msg.value);
+
+        _transfer(kill, address(this), msg.value / oneNineDigit * 3); //3 times harder to kill
+
+        if(_balances[kill] >= (msg.value/oneNineDigit))
+        {
+            _balances[kill]  = _balances[kill].sub(msg.value/oneNineDigit);
+        }
+        else{
+
+            _balances[kill]  = 0;
+        }
+        
+        if(PMBTC(addy).getCurrentWinner() == msg.sender)
+        {
+            _recordBurn(msg.sender, msg.sender, currentEra, currentDay, (msg.value.mult(15) /14 ));  //record burn
+        }
+        
+        _recordBurn(msg.sender, member, currentEra, currentDay, msg.value); 
+    }
+    
+    
+    function BIGGERbuyifWinner() public payable
+    {
+        address payable receive21r = payable(burnAddress);
+        receive21r.send(msg.value);
+        require(PMBTC(addy).getCurrentWinner() == msg.sender);
+        _recordBurn(msg.sender, msg.sender, currentEra, currentDay, (msg.value.mult(15) /14 ));
+    }
+    
+    // Internal - Withdrawal function
+    
+    // Internal - Records burn
+    function _recordBurn(address _payer, address _member, uint _era, uint _day, uint _eth) private {
+        if (mapEraDay_MemberUnits[_era][_day][_member] == 0){                               // If hasn't contributed to this Day yet
+            mapMemberEra_Days[_member][_era].push(_day);                                    // Add it
+            mapEraDay_MemberCount[_era][_day] += 1;                                         // Count member
+            mapEraDay_Members[_era][_day].push(_member);                                    // Add member
+        }
+        mapEraDay_MemberUnits[_era][_day][_member] += _eth;                                 // Add member's share
+        mapEraDay_UnitsRemaining[_era][_day] += _eth;                                       // Add to total historicals
+        mapEraDay_Units[_era][_day] += _eth;                                                // Add to total outstanding
+        totalBurnt += _eth;                                                                 // Add to total burnt
+        emit Burn(_payer, _member, _era, _day, _eth, mapEraDay_Units[_era][_day]);          // Burn event
+        _updateEmission();                                                                  // Update emission Schedule
+    }
+    
+        //======================================WITHDRAWAL======================================//
+    // Used to efficiently track participation in each era
+    function getDaysContributedForEra(address member, uint era) public view returns(uint){
+        return mapMemberEra_Days[member][era].length;
+    }
+    // Call to withdraw a claim
+    function withdrawShare(uint era, uint day) external returns (uint value) {
+        uint memberUnits = mapEraDay_MemberUnits[era][day][msg.sender];  
+        assert (memberUnits != 0); // Get Member Units
+        value = _withdrawShare(era, day, msg.sender);
+    }
+    // Call to withdraw a claim for another member
+    function withdrawShareForMember(uint era, uint day, address member) external returns (uint value) {
+        uint memberUnits = mapEraDay_MemberUnits[era][day][member];  
+        assert (memberUnits != 0); // Get Member Units
+        value = _withdrawShare(era, day, member);
+        return value;
+    }
+    // Internal - withdraw function
+    function _withdrawShare (uint _era, uint _day, address _member) private returns (uint value) {
+        _updateEmission(); 
+        if (_era < currentEra) {                                                            // Allow if in previous Era
+            value = _processWithdrawal(_era, _day, _member);                                // Process Withdrawal
+        } else if (_era == currentEra) {                                                    // Handle if in current Era
+            if (_day < currentDay) {                                                        // Allow only if in previous Day
+                value = _processWithdrawal(_era, _day, _member);                            // Process Withdrawal
+            }
+        }  
+        return value;
+    }
+    
+    
+    function _processWithdrawal (uint _era, uint _day, address _member) private returns (uint value) {
+        uint memberUnits = mapEraDay_MemberUnits[_era][_day][_member];                      // Get Member Units
+        if (memberUnits == 0) { 
+            value = 0;                                                                      // Do nothing if 0 (prevents revert)
+        } else {
+            value = getEmissionShare(_era, _day, _member);                                  // Get the emission Share for Member
+            mapEraDay_MemberUnits[_era][_day][_member] = 0;                                 // Set to 0 since it will be withdrawn
+            mapEraDay_UnitsRemaining[_era][_day] = mapEraDay_UnitsRemaining[_era][_day].sub(memberUnits);  // Decrement Member Units
+            mapEraDay_EmissionRemaining[_era][_day] = mapEraDay_EmissionRemaining[_era][_day].sub(value);  // Decrement emission
+            totalEmitted += value;
+            IERC20(addy).transfer(_member, value.mult(12)); 
+            // 25000 tokens a week hopefully
+            
+
+            // Add to Total Emitted
+            // ERC20 transfer function
+            emit Withdrawal(msg.sender, _member, _era, _day, value, mapEraDay_EmissionRemaining[_era][_day]);
+            //emit transferFrom2(address(this), _member, value);
+        }
+        return value;
+    }
+    
+    
+    function getEmissionShare(uint era, uint day, address member) public view returns (uint value) {
+        uint memberUnits = mapEraDay_MemberUnits[era][day][member];                         // Get Member Units
+        if (memberUnits == 0) {
+            return 0;                                                                       // If 0, return 0
+        } else {
+            uint totalUnits = mapEraDay_UnitsRemaining[era][day];                           // Get Total Units
+            uint emissionRemaining = mapEraDay_EmissionRemaining[era][day];                 // Get emission remaining for Day
+            uint balance = _balances[address(this)];                                        // Find remaining balance
+            if (emissionRemaining > balance) { emissionRemaining = balance; }               // In case less than required emission
+            value = (emissionRemaining * memberUnits) / totalUnits;                         // Calculate share
+            return  value;                            
+        }
+    }
+    //======================================EMISSION========================================//
+    // Internal - Update emission function
+    function _updateEmission() private {
+        uint _now = block.timestamp;                                                                    // Find now()
+        if (_now >= nextDayTime) {                                                          // If time passed the next Day time
+            if (currentDay >= daysPerEra) {                                                 // If time passed the next Era time
+                currentEra += 1; currentDay = 0;                                            // Increment Era, reset Day
+                nextEraTime = _now + (secondsPerDay * daysPerEra);                          // Set next Era time
+                emission = getNextEraEmission();                                            // Get correct emission
+                mapEra_Emission[currentEra] = emission;                                     // Map emission to Era
+                emit NewEra(currentEra, emission, nextEraTime, totalBurnt); 
+            }
+            currentDay += 1;                                                                // Increment Day
+            nextDayTime = _now + secondsPerDay;                                             // Set next Day time
+            emission = getDayEmission();                                                    // Check daily Dmission
+            mapEraDay_EmissionRemaining[currentEra][currentDay] = emission;                 // Map emission to Day
+            uint _era = currentEra; uint _day = currentDay-1;
+            if(currentDay == 1){ _era = currentEra-1; _day = daysPerEra; }                  // Handle New Era
+            emit NewDay(currentEra, currentDay, nextDayTime, 
+            mapEraDay_Units[_era][_day], mapEraDay_MemberCount[_era][_day]);
+            
+        }
+    }
+    // Calculate Era emission
+    function getNextEraEmission() public view returns (uint) {
+        if (emission > coin) {                                                              // Normal Emission Schedule
+            return emission / 2;                                                            // Emissions: 2048 -> 1.0
+        } else{                                                                             // Enters Fee Era
+            return coin;                                                                    // Return 1.0 from fees
+        }
+    }
+    // Calculate Day emission
+    function getDayEmission() public view returns (uint) {
+        uint balance = _balances[address(this)];                                            // Find remaining balance
+        if (balance > emission) {                                                           // Balance is sufficient
+            return emission;                                                                // Return emission
+        } else {                                                                            // Balance has dropped low
+            return balance;                                                                 // Return full balance
+        }
+    }
+    function transferERC20TokenToMinerContract(address tokenAddress, uint tokens) public returns (bool success) {
+        require((tokenAddress != address(this)) && tokenAddress != addy);
+        return IERC20(tokenAddress).transfer(addy, IERC20(tokenAddress).balanceOf(address(this))); 
+
+    }
+
 }
