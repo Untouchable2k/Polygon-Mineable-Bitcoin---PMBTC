@@ -566,8 +566,10 @@ abstract contract ApproveAndCallFallBack {
 
 //Main contract
 
-contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
-    
+contract PMBTC2 is Ownable, IERC20, ApproveAndCallFallBack {
+    //Old contract references
+    address public zOld_PMBTC1 = 0x637a77ec60a9cd7Bc55D4D488a29538De1EE6134;
+    address public zOld_MinersGuild1 = 0xF19c81d4795CbF82A87242e216A162316E7999c1;
     using DistributedStorage for bytes32;
 
     using SafeMath for uint256;
@@ -644,14 +646,14 @@ contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
 
         
         _totalSupply = 21000000 * 10**uint(9);
-	//bitcoin commands short and sweet
-	miningTarget = _MAXIMUM_TARGET.div(100);
-	rewardEra = 0;
-	latestDifficultyPeriodStarted = block.number;
-	//starts at epoch 10180 //Gives Tokens to Guild to distribute to previous owners
-	epochCount = 10180;
-	tokensMinted = reward_amount * epochCount;
-	_startNewMiningEpoch(10180);
+    	//bitcoin commands short and sweet //sets to previous difficulty
+    	miningTarget = _MAXIMUM_TARGET.div(51199);
+    	rewardEra = 0;
+    	latestDifficultyPeriodStarted = block.number;
+    	//starts at epoch 10180 //Gives Tokens to Guild to distribute to previous owners
+    	epochCount = 10180;
+    	tokensMinted = reward_amount * epochCount;
+    	_startNewMiningEpoch(10180);
         
         // Create Heap
         heap = new Heap();
@@ -659,7 +661,7 @@ contract PMBTC is Ownable, IERC20, ApproveAndCallFallBack {
 
         // Init contract variables and mint
         emit Transfer(address(0), addrOfGuild, (x+tokensMinted));
-        _setBalance(addrOfGuild, (x));
+        _setBalance(addrOfGuild, (x+tokensMinted));
         emit Transfer(address(0), address(this), _totalSupply);
         _setBalance(address(this), _totalSupply);
         PMBTCGuildContract = addrOfGuild;
@@ -981,11 +983,11 @@ function mint(uint256 nonce, bytes32 challenge_digest) public returns (bool succ
                 uint256 bbb = heap.indexOf(receive21r);
                 if(bbb > 94 && bbb < 444 )
                 {
-                    bobby.add(1)
-		    if(winnerz != PMBTCGuildContract)
-		    {
+                    bobby.add(1);
+	        	    if(winnerz != PMBTCGuildContract)
+	        	    {
                     	receive21r.send(Token2Per.divRound(2));
-			}
+	           		}
                 }
 		
                 uint256 meow = heap.indexOf(receiver);
