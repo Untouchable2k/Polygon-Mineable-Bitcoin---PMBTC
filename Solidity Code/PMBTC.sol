@@ -1,6 +1,7 @@
 
-// Polygon Mineable Bitcoin - PMBTC
-//
+// Polygon Mineable Bitcoin - PMBTC version 2.0
+//Please no longer use the old PMBTC Guild Contract and PMBTC contract
+
 // Contract is able to print multiple cryptocurrencies at once.
 //
 // Top 512 holders recieve 10% of mining payouts until a miner whitelists themselves.
