@@ -1,1 +1,11 @@
-This will serve as the whitepaper for PMBTC and my design process behind the token!
+This will serve as the whitepaper for Polgon Mineable Bitcoin or PMBTC or PM for real short and my design process behind the token!
+This contract deployment was two contracts large because of the large size.
+
+The inital design was to bring a part of every system that I enjoyed in crypto and see if I could deploy something a little new.
+I initalled upgraded all the code to the contracts of to 0.7.6
+  A) 0xBitcoin - A way to print tokens using Proof-of-Work.  Connected machines solve a complicated hash unique to their ethereum address in order to recieve a mining reward
+        https://etherscan.io/address/0xb6ed7644c69416d67b522e20bc294a9a9b405b31#code
+  B) Vether - A way to 24,330 PMBTC every 4 days.  Every 204 auctions the auction amount halves(~800 days). This allows for fair entry without being a miner!
+        https://etherscan.io/address/0x4Ba6dDd7b89ed838FEd25d208D4f644106E34279#code
+  C) Shuffle - A way to keep track of the top 512 addresses, which we reward with 10% of the mining reward and 1/2% of all transactions. A 8% discount on purchasing PMBTC at auction if you are the current winnerz on the Shuffle send (variable: winnerz)
+        https://etherscan.io/address/0x3a9fff453d50d4ac52a6890647b823379ba36b9e#code
