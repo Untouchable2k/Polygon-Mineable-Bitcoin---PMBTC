@@ -2,7 +2,7 @@ This will serve as the whitepaper for Polgon Mineable Bitcoin or PMBTC or PM for
 This contract deployment was two contracts large because of the large size.
 
 The inital design was to bring a part of every system that I enjoyed in crypto and see if I could deploy something a little new.
-  A) 0xBitcoin - A way to print tokens using Proof-of-Work.  Connected machines solve a complicated hash unique to their ethereum address in order to recieve a          mining reward
+  A) 0xBitcoin - A way to securly print tokens using Proof-of-Work.  Connected machines solve a complicated hash unique to their ethereum address in order to recieve a          mining reward
         https://etherscan.io/address/0xb6ed7644c69416d67b522e20bc294a9a9b405b31#code
   B) Vether - A way to 24,330 PMBTC every 4 days.  Every 204 auctions the auction amount halves(~800 days). This allows for fair entry without being a miner!
         https://etherscan.io/address/0x4Ba6dDd7b89ed838FEd25d208D4f644106E34279#code
@@ -15,7 +15,13 @@ Then I added my own twist ontop of these contracts
           We can give-away wrapped (NFTs) and valuable items or 1/1s!
     A way to reduce the difficulty in half! Why not allow the miners for a cost to reduce difficulty and increase profits!
     A way to CLEAR the Top 512 holders, forcing inactive holders to make a transaction and fight for new heap spots!!!!
-    A way to maintain the costs without inflating the price! These tokens can be passively 
+    A way to maintain the costs without inflating the price!
     
+This allows for miners to recieve Matic and PMBTC and up to 5 other Cryptocurrencies at once!  All while funding his account so no bridge is needed for Miners to access their payouts on Polygon!!
+Miners will have access to a range of mining options depending on what type of cryptocurrency payout they desire!!! Custom mine your favorites ditch the reset!
 
+The pool is online day 3 of launch and a public miner was available and posted on discord
+Please see https://github.com/CrazyCaptian/Polygon-Mineable-Bitcoin---PMBTC/
+To Download the miner
+Website: https://pmbitcoin.org
 I initalled upgraded all the code to the contracts of to 0.7.6 solidity standards
