@@ -10,7 +10,7 @@ The inital design was to bring a part of every system that I enjoyed in crypto a
         https://etherscan.io/address/0x3a9fff453d50d4ac52a6890647b823379ba36b9e#code
         
 Then I added my own twist ontop of these contracts
-    A way to print up to 5 different cryptocurrencies at once!  Send in any ERC20 compatible token and it will turn itself into a Proof-of-Work token that will distribute FOREVER in our minter(But mostly over 2 years).
+    A way to print up to 5 different cryptocurrencies* at once!  Send in any ERC20 compatible token and it will turn itself into a Proof-of-Work token that will distribute FOREVER in our minter(But mostly over 2 years).
           A way to maintain the costs without inflating the price! These ERC20 compatible tokens can be passively mined with virtually no extra costs!
           We can give-away wrapped (NFTs) and valuable items or 1/1s!
     A way to reduce the difficulty in half! Why not allow the miners for a cost to reduce difficulty and increase profits!
@@ -25,3 +25,5 @@ Please see https://github.com/CrazyCaptian/Polygon-Mineable-Bitcoin---PMBTC/
 To Download the miner
 Website: https://pmbitcoin.org
 I initalled upgraded all the code to the contracts of to 0.7.6 solidity standards
+
+PMBTC contract starts with One extra cryptocurrecny enabled besides MATIC, the 4 other cryptocurrencies must pay 100 MATIC per level in order to pay for the added transaction cost of the new token to be mined
