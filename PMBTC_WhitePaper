@@ -26,4 +26,4 @@ To Download the miner
 Website: https://pmbitcoin.org
 I initalled upgraded all the code to the contracts of to 0.7.6 solidity standards
 
-PMBTC contract starts with One extra cryptocurrecny enabled besides MATIC, the 4 other cryptocurrencies must pay 100 MATIC per level in order to pay for the added transaction cost of the new token to be mined
+PMBTC contract starts with One extra cryptocurrecny enabled besides MATIC, the 4 other cryptocurrencies must pay 100 MATIC (Goes to the contract and split fairly to all miners) per level in order to pay for the added transaction cost of the new token to be mined
