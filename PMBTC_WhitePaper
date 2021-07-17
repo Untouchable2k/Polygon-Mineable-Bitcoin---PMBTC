@@ -44,7 +44,9 @@ The inital design was to bring a part of every system that I enjoyed in crypto a
 
 
   C) Shuffle - Added to Proof-of-Work Contract - A way to keep track of the top 512 addresses and reward them with part of a transaction.
-        Our contract rewards the 80% of the top 512 holders with 10% of PMBTC & 50% of the Matic of every mint.  This will allow fighting for these coveted spots
+        Our contract rewards the 100% of the top 512 holders with 10% of PMBTC &
+        Our contract rewards 50% of the Matic of every mint to one of  400 of the 512 Spots - This will allow fighting for these coveted spot
+        Our contract rewards an extra 50% of the Matic of every mint to the miner if they are one of  100 of the 512 Spots - This will allow fighting for these coveted spots
         Our contract rewards the top 512 addresses with 1/2% of all transactions
         Our contract rewards the Proof-of-Burn or MinersGuild2 contract with 1/2% of every transaction
         http:// https://etherscan.io/address/0x3a9fff453d50d4ac52a6890647b823379ba36b9e#code Original Shuffle Contract
