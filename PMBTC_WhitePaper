@@ -43,7 +43,7 @@ The inital design was to bring a part of every system that I enjoyed in crypto a
         https://etherscan.io/address/0x4Ba6dDd7b89ed838FEd25d208D4f644106E34279#code Original Vether Contract
 
 
-  B2) Shuffle - A way to keep track of the top 512 addresses and reward them with part of a transaction.
+  C) Shuffle - Added to Proof-of-Burn Contract - A way to keep track of the top 512 addresses and reward them with part of a transaction.
         Our contract rewards the 80% of the top 512 holders with 10% of PMBTC & 50% of the Matic of every mint.  This will allow fighting for these coveted spots
         Our contract rewards the top 512 addresses with 1/2% of all transactions
         Our contract rewards the Proof-of-Burn or MinersGuild2 contract with 1/2% of every transaction
