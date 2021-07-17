@@ -25,7 +25,7 @@ Total supply: 32,100,000.00
 
 The inital design was to bring a part of every system that I enjoyed in crypto and see if I could deploy them all together and add something a little new.  The three contracts I choose to combined were:
 
-  A) 0xBitcoin - aka Proof-of-Work -
+  A) 0xBitcoin - aka Proof-of-Work Contract -
         A way to securly print tokens using Proof-of-Work. 21,000,000 tokens are printed by Proof-of-Work
         Machines connected to the contract solve a complicated hash unique to their ethereum address in order to 
         Set to be average 10 minute solves overall, it will reward 50 PMBTC per solve or a total of 28,800 PMBTC every 4 days 
@@ -35,7 +35,7 @@ The inital design was to bring a part of every system that I enjoyed in crypto a
         https://etherscan.io/address/0xb6ed7644c69416d67b522e20bc294a9a9b405b31#code  Original 0xBitcoin Contrafct
 
 
-  B) Vether - aka Proof-of-Burn
+  B) Vether - aka Proof-of-Burn Contract
         A way to securly auction off PMBTC every 4 days.  11,100,000 tokens are printed by Proof-of-Burn.
         Our contract collects MATIC payments for 4 days.  After 4 days it divides the reward by how much MATIC you sent vs the total and you recieve your percentage of the PMBTC in your wallet.
                      The total PMBTC per auction to start is 24,330 and it will half every 204 auctions the auction amount halves(~800 days).
@@ -43,7 +43,7 @@ The inital design was to bring a part of every system that I enjoyed in crypto a
         https://etherscan.io/address/0x4Ba6dDd7b89ed838FEd25d208D4f644106E34279#code Original Vether Contract
 
 
-  C) Shuffle - Added to Proof-of-Burn Contract - A way to keep track of the top 512 addresses and reward them with part of a transaction.
+  C) Shuffle - Added to Proof-of-Work Contract - A way to keep track of the top 512 addresses and reward them with part of a transaction.
         Our contract rewards the 80% of the top 512 holders with 10% of PMBTC & 50% of the Matic of every mint.  This will allow fighting for these coveted spots
         Our contract rewards the top 512 addresses with 1/2% of all transactions
         Our contract rewards the Proof-of-Burn or MinersGuild2 contract with 1/2% of every transaction
