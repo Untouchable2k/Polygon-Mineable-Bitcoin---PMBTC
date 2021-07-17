@@ -1,19 +1,14 @@
-[b]PMBitcoin or Polygon Mineable Bitcoin
+PMBitcoin or Polygon Mineable Bitcoin
 
-[/b]
 Tokenized bitcoin PoW mineable on the Polygon/MATIC network utiziling a Proof-of-Burn and more! Uses these two contracts together
-Proof-of-Work PMBTC2 - [url=https://polygonscan.com/address/0x91DB156E6365de9bA8070d733F3163a48E6e3FC9#code]https://polygonscan.com/address/0x91DB156E6365de9bA8070d733F3163a48E6e3FC9#code[/url]
-Proof-of-Burn MinersGuild2 - [url=https://polygonscan.com/address/0x5c26da5cc48691bc5475d85994e5d584fbb38989#code]https://polygonscan.com/address/0x5c26da5cc48691bc5475d85994e5d584fbb38989#code[/url]
+Proof-of-Work PMBTC2 - Main Contract   https://polygonscan.com/address/0x91DB156E6365de9bA8070d733F3163a48E6e3FC9#code
+Proof-of-Burn MinersGuild2 - https://polygonscan.com/address/0x5c26da5cc48691bc5475d85994e5d584fbb38989#code
 
 
-[url=https://pmbitcoin.org]
-https://pmbitcoin.org Main website[/url]
-0x91DB156E6365de9bA8070d733F3163a48E6e3FC9
+https://pmbitcoin.org -  Main website
 
 Polygon Mineable Bitcoin is a ERC20 adaptation for the Polygon/MATIC network of the original 0xbitcoin project on Ethereum. 
 
-[url=https://github.com/CrazyCaptian/Polygon-Mineable-Bitcoin---PMBTC/blob/main/PMBTC_WhitePaper]https://github.com/CrazyCaptian/Polygon-Mineable-Bitcoin---PMBTC/blob/main/PMBTC_WhitePaper
-[/url]
 
 Symbol      : PBMTC
 Decimals    : 9
@@ -37,7 +32,7 @@ The inital design was to bring a part of every system that I enjoyed in crypto a
                The reward will half every every ~4-5 years 
         recieve a mining reward of up to 5 different cryptocurrencies and PMBTC!
 
-        [url=https://etherscan.io/address/0xb6ed7644c69416d67b522e20bc294a9a9b405b31#code]Original 0xBitcoin Contrafct[/url]
+        https://etherscan.io/address/0xb6ed7644c69416d67b522e20bc294a9a9b405b31#code  Original 0xBitcoin Contrafct
 
 
   B) Vether - aka Proof-of-Burn
@@ -45,14 +40,14 @@ The inital design was to bring a part of every system that I enjoyed in crypto a
         Our contract collects MATIC payments for 4 days.  After 4 days it divides the reward by how much MATIC you sent vs the total and you recieve your percentage of the PMBTC in your wallet.
                      The total PMBTC per auction to start is 24,330 and it will half every 204 auctions the auction amount halves(~800 days).
 
-        [url=https://etherscan.io/address/0x4Ba6dDd7b89ed838FEd25d208D4f644106E34279#code]Original Vether Contract[/url]
+        https://etherscan.io/address/0x4Ba6dDd7b89ed838FEd25d208D4f644106E34279#code Original Vether Contract
 
 
   B2) Shuffle - A way to keep track of the top 512 addresses and reward them with part of a transaction.
         Our contract rewards the 80% of the top 512 holders with 10% of PMBTC & 50% of the Matic of every mint.  This will allow fighting for these coveted spots
         Our contract rewards the top 512 addresses with 1/2% of all transactions
         Our contract rewards the Proof-of-Burn or MinersGuild2 contract with 1/2% of every transaction
-       [url=http:// https://etherscan.io/address/0x3a9fff453d50d4ac52a6890647b823379ba36b9e#code]Original Shuffle Contract[/url]
+        http:// https://etherscan.io/address/0x3a9fff453d50d4ac52a6890647b823379ba36b9e#code Original Shuffle Contract
         
 Then I added to these contracts
     A way to print up to 5 different cryptocurrencies at once!  Send in any ERC20 compatible token and it will turn itself into a Proof-of-Work token that will distribute FOREVER in our contract(But mostly over 2 years).
@@ -73,13 +68,13 @@ The alternative is offered by the Polygon/MATIC Chain: with its low gas fees, fa
 
 
 
-PMBTCtoken features:
-
 Polygon network/Matic Network
+
 The pool is online day 3 of launch and a public miner was available and posted on discord
+
 Please see https://github.com/CrazyCaptian/Polygon-Mineable-Bitcoin---PMBTC/
 To Download the miner
 Website: https://pmbitcoin.org
-I initalled upgraded all the code to the contracts of to 0.7.6 solidity standards
 
-PMBTC contract starts with One extra cryptocurrecny enabled besides MATIC
+
+I upgraded all the code to the contracts of to 0.7.6 solidity standards
