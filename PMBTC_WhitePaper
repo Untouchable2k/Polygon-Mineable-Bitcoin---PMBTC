@@ -26,7 +26,7 @@ Total supply: 32,100,000.00
 The inital design was to bring a part of every system that I enjoyed in crypto and see if I could deploy them all together and add something a little new.  The three contracts I choose to combined were:
 
   A) 0xBitcoin - aka Proof-of-Work Contract -
-        A way to securly print tokens using Proof-of-Work. 21,000,000 tokens are printed by Proof-of-Work
+        A way to securly distributed tokens using Proof-of-Work. 21,000,000 tokens are distributed by Proof-of-Work
         Machines connected to the contract solve a complicated hash unique to their ethereum address in order to 
         Set to be average 10 minute solves overall, it will reward 50 PMBTC per solve or a total of 28,800 PMBTC every 4 days 
                The reward will half every every ~4-5 years 
@@ -36,7 +36,7 @@ The inital design was to bring a part of every system that I enjoyed in crypto a
 
 
   B) Vether - aka Proof-of-Burn Contract
-        A way to securly auction off PMBTC every 4 days.  11,100,000 tokens are printed by Proof-of-Burn.
+        A way to securly auction off PMBTC every 4 days.  11,100,000 tokens are distributed by Proof-of-Burn.
         Our contract collects MATIC payments for 4 days.  After 4 days it divides the reward by how much MATIC you sent vs the total and you recieve your percentage of the PMBTC in your wallet.
                      The total PMBTC per auction to start is 24,330 
                            The amount per auction will halve every 204 auctions(~800 days).
@@ -53,8 +53,8 @@ The inital design was to bring a part of every system that I enjoyed in crypto a
         http:// https://etherscan.io/address/0x3a9fff453d50d4ac52a6890647b823379ba36b9e#code Original Shuffle Contract
         
 Then I added to these contracts
-    A way to print up to 5 different cryptocurrencies at once!  Send in any ERC20 compatible token and it will turn itself into a Proof-of-Work token that will distribute FOREVER in our contract(But mostly over 2 years).
-          The contract can print any Cryptocurrency that is ERC20 compatible!
+    A way to distribute up to 5 different cryptocurrencies at once!  Send in any ERC20 compatible token and it will turn itself into a Proof-of-Work token that will distribute FOREVER in our contract(But mostly over 2 years).
+          The contract can distribute any Cryptocurrency that is ERC20 compatible!
    A way to maintain the costs without inflating the price! These ERC20 compatible tokens can be passively mined with virtually no extra costs.
    The miner simply decides what 5 cryptocurrencies he wants to mine, and the contract does the rest.
    Give-away wrapped NFTs and valuable items or 1/1s with proof-of-work at 12 hour intervals.
