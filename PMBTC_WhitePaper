@@ -23,8 +23,7 @@ Total supply: 32,100,000.00
 
  No premine, dev cut, or advantage taken at launch. Public miner and public pool available at launch.
 
-The inital design was to bring a part of every system that I enjoyed in crypto and see if I could deploy them all together and add something a little new.  The three contracts I choose to combined were:
-
+The contracts used in the design for PMBTC are:
   A) 0xBitcoin - aka Proof-of-Work Contract -
         A way to securly distributed tokens using Proof-of-Work. 21,000,000 tokens are distributed by Proof-of-Work
         Machines connected to the contract solve a complicated hash unique to their ethereum address in order to 
