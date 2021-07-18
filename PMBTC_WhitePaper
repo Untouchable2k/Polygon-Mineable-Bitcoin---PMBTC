@@ -38,7 +38,8 @@ The inital design was to bring a part of every system that I enjoyed in crypto a
   B) Vether - aka Proof-of-Burn Contract
         A way to securly auction off PMBTC every 4 days.  11,100,000 tokens are printed by Proof-of-Burn.
         Our contract collects MATIC payments for 4 days.  After 4 days it divides the reward by how much MATIC you sent vs the total and you recieve your percentage of the PMBTC in your wallet.
-                     The total PMBTC per auction to start is 24,330 and it will half every 204 auctions the auction amount halves(~800 days).
+                     The total PMBTC per auction to start is 24,330 
+                           The amount per auction will halve every 204 auctions(~800 days).
 
         https://etherscan.io/address/0x4Ba6dDd7b89ed838FEd25d208D4f644106E34279#code Original Vether Contract
 
